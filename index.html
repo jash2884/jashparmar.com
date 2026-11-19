@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jash Parmar · Assembly</title>
+<meta name="description" content="Jash Parmar, software developer. One kit of parts builds a ring of screens, then builds every project in front of its screen and takes it apart to show how it works.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#ecebe6">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=1">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js?v=1","three/addons/":"./vendor/addons/"}}</script>
+<script type="module" src="app.js?v=1"></script>
+</head>
+<body>
+<div class="grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<canvas id="stage" aria-hidden="true"></canvas>
+<svg class="leaders" aria-hidden="true"></svg>
+<div class="labels" aria-hidden="true"></div>
+
+<header class="top">
+  <a class="mark" href="#top">Jash Parmar</a>
+  <p class="mono t-role">Software developer<br><span>at Flitzen Technologies</span></p>
+  <p class="mono t-clock">India <span class="clock">--:--</span> IST<br><button type="button" class="tgl theme-b" aria-pressed="false">Lights off</button></p>
+  <p class="mono t-av"><i class="live"></i>Open to work</p>
+  <svg class="prog" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle class="pv" cx="12" cy="12" r="9"/></svg>
+  <a class="cv mono mag" target="_blank" rel="noopener">Résumé ↗</a>
+</header>
+
+<main id="top">
+  <section class="stage" id="work" aria-label="Selected work">
+    <div class="pin">
+      <h1 class="name" aria-label="Jash Parmar"><span class="w">Jash</span> <span class="w">Parmar</span></h1>
+      <div class="hero-copy">
+        <p class="lede">I build products that run on your device, and I don’t trust a passing test until I’ve <em>watched the real thing run.</em></p>
+        <p class="mono cue"><span class="cue-line"></span><span class="cue-t">Scroll to build the ring</span></p>
+      </div>
+      <p class="mono hero-hint"><span>Push the parts</span><span>Click to shake</span><span>Drag the ring</span></p>
+      <p class="mono asm-note" aria-hidden="true"><b class="asm-n">00</b> / <span class="asm-t">58</span> parts in place</p>
+
+      <div class="info" aria-live="polite">
+        <p class="mono n"><span class="n-i">01</span> / <span class="n-t">08</span><span class="n-phase">Assembled</span></p>
+        <h2 class="t"></h2>
+        <p class="hook"></p>
+        <p class="d"></p>
+        <p class="mono s"></p>
+        <p class="links"></p>
+      </div>
+      <ol class="index mono" aria-label="Projects"></ol>
+      <p class="mono hint" aria-hidden="true"></p>
+      <p class="outro" aria-hidden="true">Eight products. <em>One kit of parts.</em></p>
+      <div class="fallback" hidden></div>
+    </div>
+  </section>
+
+  <section class="exp" id="experience">
+    <header class="sec-h"><p class="mono">( 02 )</p><h2>Where I’ve <em>worked</em></h2></header>
+    <ol class="rows"></ol>
+    <p class="mono fine edu"></p>
+  </section>
+
+  <section class="about" id="about">
+    <header class="sec-h"><p class="mono">( 03 )</p></header>
+    <p class="big"></p>
+    <div class="about-row">
+      <figure class="me"><img alt="Jash Parmar" width="288" height="318" loading="lazy"></figure>
+      <dl class="stats"></dl>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <header class="sec-h"><p class="mono">( 04 )</p><h2>Got something that should <em>actually work?</em></h2></header>
+    <div class="mailwrap">
+      <p class="mono play">The parts are yours now. Push them around.</p>
+      <a class="mail"><span></span></a>
+    </div>
+    <footer class="foot mono">
+      <span>© 2026 Jash Parmar</span>
+      <span class="links-f"><a class="f-gh" target="_blank" rel="noopener">GitHub ↗</a><a class="f-li" target="_blank" rel="noopener">LinkedIn ↗</a><a class="f-cv" target="_blank" rel="noopener">Résumé ↗</a><a class="f-cl">Classic site</a></span>
+      <a href="#top" class="totop">Back to top ↑</a>
+    </footer>
+  </section>
+</main>
+
+<div class="case" role="dialog" aria-modal="true" aria-label="Project" hidden>
+  <button class="case-x mono" type="button">Close ✕</button>
+  <div class="case-in">
+    <figure class="case-img"><img alt=""></figure>
+    <div class="case-txt">
+      <p class="mono case-n"></p>
+      <h3 class="case-t"></h3>
+      <p class="case-hook"></p>
+      <p class="case-d"></p>
+      <ul class="case-b"></ul>
+      <p class="mono case-s"></p>
+      <p class="links case-l"></p>
+    </div>
+  </div>
+</div>
+
+<div class="cursor" aria-hidden="true"><span></span></div>
+<div class="float" aria-hidden="true"><b></b><span class="mono"></span></div>
+<div class="loader" aria-hidden="true"><p class="mono">Jash Parmar<br><span class="lname">Sorting the parts</span></p><figure class="lthumb"></figure><p class="count">000</p></div>
+</body>
+</html>
