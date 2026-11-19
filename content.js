@@ -50,7 +50,7 @@ export const PROJECTS = [
   {
     "k": "invites",
     "t": "Invite Sender",
-    "hook": "built for a real wedding, used by a real family",
+    "hook": "built for a friend’s wedding",
     "img": "img/invites.webp",
     "c": "#c8901e",
     "d": "A private tool built for a friend’s wedding. Upload the guest list, design the invitation once, and every guest gets a personal WhatsApp message with their own name printed on the card.",
