@@ -2,12 +2,13 @@ import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import * as CANNON from './vendor/cannon-es.js?v=3';
-import { PROJECTS as P, HOW, EXPERIENCE, EDUCATION, ABOUT, STATS, CONTACT, PERSON } from './content.js?v=4';
-import { FORMS, POOL } from './forms.js?v=3';
-import { vert, frag, blueprint } from './screens.js?v=3';
+import { PROJECTS as P, HOW, EXPERIENCE, EDUCATION, ABOUT, STATS, CONTACT, PERSON } from './content.js?v=5';
+import { FORMS, poolFor } from './forms.js?v=5';
+import { vert, frag, blueprint } from './screens.js?v=5';
 
 /* ================= helpers ================= */
 const N = P.length;
+const POOL = poolFor(N);
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const pad2 = n => String(n).padStart(2, '0');
@@ -243,16 +244,28 @@ function run3D() {
   const loader = new THREE.TextureLoader();
   const BLANK = new THREE.DataTexture(new Uint8Array([236, 235, 230, 255]), 1, 1); BLANK.needsUpdate = true;
   let loaded = 0;
-  const countEl = $('.loader .count'); const LOAD_T0 = performance.now(); const NEED = Math.min(3, N);
-  const lParts = [...document.querySelectorAll('.l-parts li')];
-  let shownP = 0, targetP = 0;
-  function loadProgress(f, name) { targetP = f; if (name) $('.lname').textContent = 'Unpacking: ' + name; }
-  requestAnimationFrame(function tickLoader() {
-    shownP += (targetP - shownP) * 0.12; if (targetP - shownP < 0.002) shownP = targetP;
-    countEl.textContent = String(Math.round(shownP * 100)).padStart(3, '0');
-    $('.l-rule i').style.width = (shownP * 100).toFixed(1) + '%';
-    lParts.forEach((li, k) => { const n = +li.dataset.n, v = Math.round(n * Math.min(1, shownP * 1.25 - k * 0.04)); li.querySelector('i').textContent = Math.max(0, v); li.classList.toggle('full', v >= n); });
-    if (!started || shownP < 1) requestAnimationFrame(tickLoader);
+  const LOAD_T0 = performance.now(); const NEED = Math.min(3, N);
+  // loader: a small ring of empty screens that fill in as each one loads
+  const lRing = $('.l-ring'), lCards = [];
+  const cw = innerWidth < 860 ? 96 : 220, lr = (cw / 2) / Math.tan(Math.PI / N) * 1.12;
+  P.forEach((p, i) => {
+    const d = document.createElement('div'); d.className = 'l-card'; d.dataset.n = pad2(i + 1);
+    d.style.transform = `rotateY(${(i * 360 / N).toFixed(2)}deg) translateZ(${lr.toFixed(1)}px)`;
+    lRing.appendChild(d); lCards.push(d);
+  });
+  let lSpin = 0, lDone = 0;
+  function loadProgress(f, name, i) {
+    if (i !== undefined && lCards[i] && !lCards[i].classList.contains('on')) {
+      const im = new Image(); im.alt = ''; im.src = P[i].img; lCards[i].appendChild(im);
+      requestAnimationFrame(() => requestAnimationFrame(() => lCards[i].classList.add('on')));
+      lDone++; $('.l-n').textContent = pad2(lDone);
+    }
+    if (name) $('.lname').textContent = 'Hanging: ' + name;
+  }
+  requestAnimationFrame(function tickLoader(now) {
+    lSpin = (now || 0) / 1000 * 18;
+    if (!$('.loader').classList.contains('done')) { lRing.style.transform = `rotateX(-14deg) rotateY(${lSpin.toFixed(2)}deg)`; requestAnimationFrame(tickLoader); }
+    else { lRing.style.setProperty('--spin', lSpin.toFixed(2) + 'deg'); lRing.style.transform = ''; }
   });
   P.forEach((p, i) => {
     const u = {
@@ -271,9 +284,10 @@ function run3D() {
     loader.load(p.img, tex => {
       tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = Math.min(8, maxAniso); tex.minFilter = THREE.LinearMipmapLinearFilter;
       u.uTex.value = tex; u.uIA.value = tex.image.width / tex.image.height;
-      loaded++; loadProgress(Math.min(1, loaded / NEED), p.t);
-      if (loaded === NEED) setTimeout(start, Math.max(600, 2300 - (performance.now() - LOAD_T0)));
-    }, undefined, () => { loaded++; if (loaded === NEED) setTimeout(start, 350); });
+      loaded++; loadProgress(loaded / N, p.t, i);
+      if (loaded === N) setTimeout(start, Math.max(500, 2400 - (performance.now() - LOAD_T0)));
+    }, undefined, () => { loaded++; if (loaded === N) setTimeout(start, 350); });
+    if (i === N - 1) setTimeout(() => { if (loaded >= NEED) start(); }, 5000);
   });
   const floorRing = new THREE.Mesh(new THREE.TorusGeometry(R, 0.012, 6, 240), new THREE.MeshBasicMaterial({ color: INKC.clone(), transparent: true, opacity: 0.18, toneMapped: false }));
   floorRing.rotation.x = Math.PI / 2; floorRing.position.y = FLOOR; ring.add(floorRing);
@@ -871,7 +885,7 @@ function run3D() {
     const fb = $('.info .flipb'); if (fb) { const tx = apartNow > 0.5 ? 'Put it back' : 'How it works ⟲'; if (fb.textContent !== tx) fb.textContent = tx; }
     pinEl.style.setProperty('--tint', (inProj ? 1 : phase === 'dive' ? sm(0.6, 1, D) : 0).toFixed(3));
     hintEl.classList.toggle('on', inProj && fine);
-    if (inProj && fine && !hintEl.textContent) hintEl.textContent = '← → turn  ·  F take apart  ·  1 to 8 jump';
+    if (inProj && fine && !hintEl.textContent) hintEl.textContent = `← → turn  ·  F take apart  ·  1 to ${N} jump`;
     outroEl.style.opacity = String(phase === 'out' ? sm(0.45, 0.8, outU) : 0);
     outroEl.style.transform = `translateY(${lerp(24, 0, sm(0.45, 1, outU)).toFixed(1)}px)`;
     topEl.classList.toggle('solid', u > TOTAL);
