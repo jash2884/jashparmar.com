@@ -6,7 +6,7 @@ One kit of glossy parts does everything on the page:
 
 - **Hero:** the parts lie in a physics pile under my name. Push them, click to shake them, or drag the ring of screens above.
 - **Assembly:** scrolling lifts the pile into the frame of a ring of curved screens. Each screen lights up with a real, auto-scrolling screenshot of a project.
-- **Projects:** the camera dives into the ring. In front of each screen the parts build that project's object (a turntable, a hanger, a hourglass, a scoreboard…). Press **F** or click it and the object comes apart into six labelled parts ("how it works") while the screen behind flips to its engineering notes.
+- **Projects:** the camera dives into the ring. In front of each screen the parts build that project's object (a turntable, a hanger, an hourglass, a scoreboard…). Press **F** or click it and the object comes apart into six labelled parts ("how it works") while the screen behind flips to its engineering notes.
 - **Contact:** the ring comes apart and the parts rain into a pile beside the email.
 
 Day or night follows the time in India, with a manual switch. Keys: arrows to turn, **1 to 9** to jump, **F** to take apart.
