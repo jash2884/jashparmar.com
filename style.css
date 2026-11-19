@@ -295,3 +295,4 @@ section:not(.stage){padding:16vh var(--pad) 12vh}
 @media (max-width:860px){.case-cs div{grid-template-columns:1fr;gap:4px}}
 
 .hero-copy .hero-role{grid-column:1/-1}
+.cv-menu a{color:var(--ink)}
