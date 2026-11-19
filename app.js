@@ -242,7 +242,17 @@ function run3D() {
   const panels = [];
   const loader = new THREE.TextureLoader();
   let loaded = 0;
-  const countEl = $('.loader .count');
+  const countEl = $('.loader .count'); const LOAD_T0 = performance.now();
+  const lParts = [...document.querySelectorAll('.l-parts li')];
+  let shownP = 0, targetP = 0;
+  function loadProgress(f, name) { targetP = f; if (name) $('.lname').textContent = 'Unpacking: ' + name; }
+  requestAnimationFrame(function tickLoader() {
+    shownP += (targetP - shownP) * 0.12; if (targetP - shownP < 0.002) shownP = targetP;
+    countEl.textContent = String(Math.round(shownP * 100)).padStart(3, '0');
+    $('.l-rule i').style.width = (shownP * 100).toFixed(1) + '%';
+    lParts.forEach((li, k) => { const n = +li.dataset.n, v = Math.round(n * Math.min(1, shownP * 1.25 - k * 0.04)); li.querySelector('i').textContent = Math.max(0, v); li.classList.toggle('full', v >= n); });
+    if (!started || shownP < 1) requestAnimationFrame(tickLoader);
+  });
   P.forEach((p, i) => {
     const u = {
       uTex: { value: null }, uBack: { value: null }, uIA: { value: 1.6 }, uPA: { value: W / H }, uHover: { value: 0 }, uActive: { value: 0.6 }, uVel: { value: 0 },
@@ -260,9 +270,8 @@ function run3D() {
     loader.load(p.img, tex => {
       tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = Math.min(8, maxAniso); tex.minFilter = THREE.LinearMipmapLinearFilter;
       u.uTex.value = tex; u.uIA.value = tex.image.width / tex.image.height;
-      loaded++; countEl.textContent = String(Math.round(loaded / N * 100)).padStart(3, '0');
-      const lt = document.createElement('img'); lt.src = p.img; lt.alt = ''; $('.lthumb').appendChild(lt); $('.lname').textContent = p.t;
-      if (loaded === N) setTimeout(start, 350);
+      loaded++; loadProgress(loaded / N, p.t);
+      if (loaded === N) setTimeout(start, Math.max(900, 2600 - (performance.now() - LOAD_T0)));
     }, undefined, () => { loaded++; if (loaded === N) setTimeout(start, 350); });
   });
   const floorRing = new THREE.Mesh(new THREE.TorusGeometry(R, 0.012, 6, 240), new THREE.MeshBasicMaterial({ color: INKC.clone(), transparent: true, opacity: 0.18, toneMapped: false }));
