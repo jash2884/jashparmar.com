@@ -18,6 +18,11 @@ export const PROJECTS = [
         "Open Crate",
         "https://crate.jashparmar.com"
       ]
+    ],
+    "cs": [
+      "Music apps are built around their own catalogue. I wanted the files I actually own to feel as good to browse and play as a shelf of records.",
+      "A web app that reads the tags of your files in the browser, with parsers written from scratch for ID3, FLAC, Ogg, MP4 and WAV, keeps the library in IndexedDB and plays it through a variable-rate audio engine with turntable motor physics, so you can scratch.",
+      "No dependencies and no build step, 14 automated tests, and nothing ever leaves the device."
     ]
   },
   {
@@ -41,6 +46,11 @@ export const PROJECTS = [
         "Code",
         "https://github.com/jash2884/drape"
       ]
+    ],
+    "cs": [
+      "You see an outfit in a screenshot and want to know where every piece is from, and whether there is a cheaper version.",
+      "Garment parsing, SAM cut-outs and a fashion embedding model running on the phone in a Web Worker. Exact matches come through a Cloudflare Worker; lookalikes come from my own 9,257-product catalogue, searched on the device.",
+      "Live and public on GitHub, built as a business idea, with a Chrome extension that shares the same engine."
     ]
   },
   {
@@ -64,6 +74,11 @@ export const PROJECTS = [
         "Code",
         "https://github.com/jash2884/chat-wrapped"
       ]
+    ],
+    "cs": [
+      "People love their yearly Wrapped and their group chats, but the tools that wrap a chat upload your private messages.",
+      "An installable web app that parses WhatsApp and Telegram exports in a Web Worker on your device and turns them into a 20-slide story, a title for every member and a guess-who quiz. Only anonymised numbers reach the AI verdict, behind a model fallback chain.",
+      "It opens straight from WhatsApp’s share menu. When a friend’s Android phone could not upload a zip, I added zip detection and a built-in decompressor so it works on every phone. 19 tests, CI green."
     ]
   },
   {
@@ -87,6 +102,11 @@ export const PROJECTS = [
         "Code",
         "https://github.com/jash2884/stepwise"
       ]
+    ],
+    "cs": [
+      "Students learn algorithms and operating systems from static diagrams, so they never see what actually changes at each step.",
+      "62 step-by-step visualisers across DSA, operating systems, databases, networks, automata and compilers, each with live pseudocode and variables, optional 3D views, an AI tutor for the step on screen and GATE-style practice.",
+      "Every engine is a pure function checked against textbook answers and random fuzz inputs, with 350+ tests and a search-friendly page for every tool."
     ]
   },
   {
@@ -110,6 +130,11 @@ export const PROJECTS = [
         "Code",
         "https://github.com/jash2884/agentproof"
       ]
+    ],
+    "cs": [
+      "Teams shipping AI agents need to know a new version is safe before it goes out, and that is often a manual spot check.",
+      "Import real agent traces, assert business policies as deterministic rules (required and forbidden tool calls, latency and cost budgets), compare versions and block unsafe releases in CI.",
+      "Tenant workspaces with roles, audit history and revocable tokens, CI green. It grew out of months of writing benchmark tasks for AI coding agents."
     ]
   },
   {
@@ -133,6 +158,11 @@ export const PROJECTS = [
         "Code",
         "https://github.com/jash2884/slotwise"
       ]
+    ],
+    "cs": [
+      "Booking systems that check for clashes in application code can still double book when two requests arrive at the same moment.",
+      "Mentor scheduling where a database constraint makes double booking impossible, retries are idempotent and return the original booking, and every change writes an audit event in the same transaction.",
+      "Tested with retries sent at the same moment, deployed on Cloudflare Workers and D1, with CI on every push."
     ]
   },
   {
@@ -152,6 +182,11 @@ export const PROJECTS = [
         "Open it (login needed)",
         "https://invites.jashparmar.com"
       ]
+    ],
+    "cs": [
+      "A friend needed to send personal wedding invitations to hundreds of guests on WhatsApp. Paid tools capped the count or kept a copy of the guest list.",
+      "Built and hosted it the same day: guest list import, a card editor that prints each guest’s name (including Hindi and Gujarati), formatting tools, and a paced sender with a daily limit that carries on the next morning, all editable while it runs.",
+      "Private behind a password and a Cloudflare Worker, and it restarts itself if the server reboots. A real user with a real deadline."
     ]
   },
   {
@@ -175,6 +210,11 @@ export const PROJECTS = [
         "Code",
         "https://github.com/jash2884/matchday-brain"
       ]
+    ],
+    "cs": [
+      "Most prediction sites never show how often they were wrong.",
+      "Elo-based models for football, cricket and the NFL, tuned on past seasons and tested on seasons they had never seen, served by a Cloudflare Worker with a small prediction API.",
+      "Every prediction is scored in public, with accuracy and calibration, so the model is judged on results rather than claims."
     ]
   },
   {
@@ -194,6 +234,11 @@ export const PROJECTS = [
         "Light it",
         "https://tonight.jashparmar.com"
       ]
+    ],
+    "cs": [
+      "Social apps reward the loudest voices. I wanted one quiet shared moment: the same question, answered once a day by anyone, anywhere.",
+      "Answers become lights on a night globe drawn on canvas with the real sun terminator, stored in D1, with Llama Guard checking every line before it is allowed to glow.",
+      "If moderation fails, the API refuses rather than letting a line through, and it allows one answer per visitor per day without accounts."
     ]
   }
 ];
@@ -446,10 +491,20 @@ export const EDUCATION = 'B.Tech in Computer Science, IIIT Kota, 2022 to 2026';
 export const ABOUT = 'Before Flitzen I spent months writing tasks that test frontier AI coding agents. It taught me one habit: run the real thing. Off the clock I build small products, mostly on Cloudflare and mostly on your own device, so your data stays yours.';
 export const STATS = [['67+', 'AI benchmark tasks accepted'], ['13+', 'Client sites rebuilt'], ['650+', 'DSA problems solved']];
 export const CONTACT = {
-  email: 'hello@jashparmar.com',
-  resume: '/Jash-Parmar-Resume.pdf?v=2026-11-13',
-  github: 'https://github.com/jash2884',
-  linkedin: 'https://www.linkedin.com/in/jash-parmar-7973b2255/',
-  classic: 'https://jashparmar.com/classic/',
+  "email": "hello@jashparmar.com",
+  "resume": "/Jash-Parmar-Resume-Software-Developer.pdf?v=2026-11-13",
+  "github": "https://github.com/jash2884",
+  "linkedin": "https://www.linkedin.com/in/jash-parmar-7973b2255/",
+  "classic": "https://jashparmar.com/classic/",
+  "resumes": [
+    [
+      "Software developer",
+      "/Jash-Parmar-Resume-Software-Developer.pdf?v=2026-11-13"
+    ],
+    [
+      "Forward-deployed engineer",
+      "/Jash-Parmar-Resume-FDE.pdf?v=2026-11-13"
+    ]
+  ]
 };
 export const PERSON = { name: 'Jash Parmar', role: 'Software developer', company: 'Flitzen Technologies', location: 'India', tz: 'Asia/Kolkata', portrait: 'img/jash-parmar-288.webp' };

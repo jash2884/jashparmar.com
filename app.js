@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import * as CANNON from './vendor/cannon-es.js?v=3';
-import { PROJECTS as P, HOW, EXPERIENCE, EDUCATION, ABOUT, STATS, CONTACT, PERSON } from './content.js?v=6';
+import { PROJECTS as P, HOW, EXPERIENCE, EDUCATION, ABOUT, STATS, CONTACT, PERSON } from './content.js?v=7';
 import { FORMS, poolFor } from './forms.js?v=5';
 import { vert, frag, blueprint } from './screens.js?v=5';
 
@@ -25,7 +25,17 @@ const TOTAL_PARTS = Object.values(POOL).reduce((a, b) => a + b, 0);
 
 /* ================= content into the page ================= */
 $('.asm-t').textContent = TOTAL_PARTS;
-for (const a of $$('.cv, .f-cv')) a.href = CONTACT.resume;
+{ // résumé: one for each kind of role
+  const menu = $('.cv-menu'), btn = $('.cv');
+  for (const [label, href] of CONTACT.resumes) {
+    const a = document.createElement('a'); a.href = href; a.target = '_blank'; a.rel = 'noopener'; a.innerHTML = `<span>${label}</span><span aria-hidden="true">↗</span>`; menu.appendChild(a);
+    const f = document.createElement('a'); f.href = href; f.target = '_blank'; f.rel = 'noopener'; f.textContent = `Résumé, ${label.startsWith('Software') ? 'SDE' : 'FDE'} ↗`; $('.f-cvs').appendChild(f);
+  }
+  const setOpen = o => { menu.hidden = !o; btn.setAttribute('aria-expanded', String(o)); };
+  btn.addEventListener('click', e => { e.stopPropagation(); setOpen(menu.hidden); if (!menu.hidden) menu.querySelector('a').focus({ preventScroll: true }); });
+  addEventListener('click', e => { if (!menu.hidden && !e.target.closest('.cvw')) setOpen(false); });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && !menu.hidden) { setOpen(false); btn.focus(); } });
+}
 $('.f-gh').href = CONTACT.github; $('.f-li').href = CONTACT.linkedin; $('.f-cl').href = CONTACT.classic;
 const mailA = $('.mail'); mailA.href = 'mailto:' + CONTACT.email; mailA.setAttribute('aria-label', CONTACT.email);
 const mailSpan = mailA.querySelector('span');
@@ -112,6 +122,7 @@ function openCase(i) {
   caseEl.querySelector('.case-t').textContent = p.t;
   const h = caseEl.querySelector('.case-hook'); h.textContent = p.hook; h.style.color = p.c;
   caseEl.querySelector('.case-d').textContent = p.d;
+  caseEl.querySelector('.case-cs').innerHTML = (p.cs || []).map((t, j) => `<div><dt>${['The problem', 'What I built', 'Proof it works'][j]}</dt><dd>${t}</dd></div>`).join('');
   caseEl.querySelector('.case-b').innerHTML = p.b.map(x => `<li>${x}</li>`).join('');
   caseEl.querySelector('.case-s').textContent = p.s;
   caseEl.querySelector('.case-l').innerHTML = p.l.map(([t, h2]) => `<a href="${h2}" target="_blank" rel="noopener">${t} ↗</a>`).join('');

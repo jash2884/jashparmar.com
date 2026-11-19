@@ -41,7 +41,8 @@ button{font:inherit}
 .tgl:hover,.tgl[aria-pressed=true]{color:var(--acc)}
 .live{width:7px;height:7px;border-radius:50%;background:#20b25a;box-shadow:0 0 0 0 rgba(32,178,90,.5);animation:pulse 2s infinite}
 @keyframes pulse{70%{box-shadow:0 0 0 7px rgba(32,178,90,0)}100%{box-shadow:0 0 0 0 rgba(32,178,90,0)}}
-.cv{grid-column:12/13;white-space:nowrap;justify-self:end;text-decoration:none;padding:8px 12px;border:1px solid var(--ink);border-radius:999px;transition:background .25s,color .25s}
+.cvw{grid-column:12/13;justify-self:end;position:relative}
+.cv{white-space:nowrap;background:none;color:inherit;cursor:pointer;text-decoration:none;padding:8px 12px;border:1px solid var(--ink);border-radius:999px;transition:background .25s,color .25s}
 .cv:hover{background:var(--ink);color:var(--paper)}
 .prog{grid-column:11/12;justify-self:end;align-self:center;width:24px;height:24px;margin-right:12px!important;transform:rotate(-90deg)}
 .prog circle{fill:none;stroke:var(--line);stroke-width:2}
@@ -223,7 +224,7 @@ section:not(.stage){padding:16vh var(--pad) 12vh}
   .t-role,.t-av,.prog{display:none}
   .mark{grid-column:1/6;padding-left:0}
   .t-clock{grid-column:6/10;padding-left:0;font-size:10px}
-  .cv{grid-column:10/13}
+  .cvw{grid-column:10/13}
   .grid{grid-template-columns:repeat(4,1fr)}
   .grid i:nth-child(n+5){display:none}
   .grid i:nth-child(4){border-right:1px solid var(--line)}
@@ -274,3 +275,23 @@ section:not(.stage){padding:16vh var(--pad) 12vh}
 /* keyboard users can always see where they are */
 :focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:4px}
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* résumé picker */
+.cv-menu{position:absolute;right:0;top:calc(100% + 8px);min-width:250px;padding:8px;border-radius:14px;background:var(--paper);border:1px solid var(--line);box-shadow:0 20px 40px -20px rgba(0,0,0,.35);display:grid;gap:4px;z-index:40}
+.cv-menu[hidden]{display:none}
+.cv-menu p{margin:4px 8px 6px;color:var(--soft)}
+.cv-menu a{display:flex;justify-content:space-between;gap:16px;padding:10px 12px;border-radius:9px;text-decoration:none;font:500 14px/1.2 var(--sans)}
+.cv-menu a:hover,.cv-menu a:focus-visible{background:var(--ink);color:var(--paper)}
+.f-cvs{display:contents}
+/* who I am, said once, early */
+.hero-role{display:flex;align-items:center;gap:8px;margin:0 0 14px;padding-left:10px;color:var(--ink)}
+.hero-role .live{flex:none}
+@media (max-width:860px){.hero-role{padding-left:0;font-size:10px;line-height:1.5}}
+/* the case study: problem, build, proof */
+.case-cs{margin:0 0 16px;display:grid;gap:12px}
+.case-cs div{display:grid;grid-template-columns:110px 1fr;gap:14px;padding-top:12px;border-top:1px solid var(--line)}
+.case-cs dt{font:500 10.5px/1.5 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--mid)}
+.case-cs dd{margin:0;font-size:15px;line-height:1.5;color:var(--body)}
+@media (max-width:860px){.case-cs div{grid-template-columns:1fr;gap:4px}}
+
+.hero-copy .hero-role{grid-column:1/-1}

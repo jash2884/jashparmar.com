@@ -27,9 +27,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=8">
 <script type="importmap">{"imports":{"three":"./vendor/three.module.min.js?v=3","three/addons/":"./vendor/addons/"}}</script>
-<script type="module" src="app.js?v=6"></script>
+<script type="module" src="app.js?v=7"></script>
 </head>
 <body>
 <div class="grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -43,7 +43,7 @@
   <p class="mono t-clock">India <span class="clock">--:--</span> IST<br><button type="button" class="tgl theme-b" aria-pressed="false">Lights off</button></p>
   <p class="mono t-av"><i class="live"></i>Open to work</p>
   <svg class="prog" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle class="pv" cx="12" cy="12" r="9"/></svg>
-  <a class="cv mono mag" target="_blank" rel="noopener">Résumé ↗</a>
+  <div class="cvw"><button class="cv mono mag" type="button" aria-haspopup="true" aria-expanded="false">Résumé <span aria-hidden="true">↓</span></button><div class="cv-menu" hidden><p class="mono">Pick the one for the role</p></div></div>
 </header>
 
 <main id="top">
@@ -51,6 +51,7 @@
     <div class="pin">
       <h1 class="name" aria-label="Jash Parmar"><span class="w">Jash</span> <span class="w">Parmar</span></h1>
       <div class="hero-copy">
+        <p class="mono hero-role"><i class="live"></i>Software developer · open to SDE and FDE roles · India, remote</p>
         <p class="lede">I build products that run on your device, and I don’t trust a passing test until I’ve <em>watched the real thing run.</em></p>
         <p class="mono cue"><span class="cue-line"></span><span class="cue-t">Scroll to build the ring</span></p>
       </div>
@@ -95,7 +96,7 @@
     </div>
     <footer class="foot mono">
       <span>© 2026 Jash Parmar</span>
-      <span class="links-f"><a class="f-gh" target="_blank" rel="noopener">GitHub ↗</a><a class="f-li" target="_blank" rel="noopener">LinkedIn ↗</a><a class="f-cv" target="_blank" rel="noopener">Résumé ↗</a><a class="f-cl">Classic site</a></span>
+      <span class="links-f"><a class="f-gh" target="_blank" rel="noopener">GitHub ↗</a><a class="f-li" target="_blank" rel="noopener">LinkedIn ↗</a><span class="f-cvs"></span><a class="f-cl">Classic site</a></span>
       <a href="#top" class="totop">Back to top ↑</a>
     </footer>
   </section>
@@ -124,6 +125,7 @@
       <h3 class="case-t"></h3>
       <p class="case-hook"></p>
       <p class="case-d"></p>
+      <dl class="case-cs"></dl>
       <ul class="case-b"></ul>
       <p class="mono case-s"></p>
       <p class="links case-l"></p>
