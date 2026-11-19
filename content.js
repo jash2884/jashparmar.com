@@ -450,6 +450,6 @@ export const CONTACT = {
   resume: '/Jash-Parmar-Resume.pdf?v=2026-11-13',
   github: 'https://github.com/jash2884',
   linkedin: 'https://www.linkedin.com/in/jash-parmar-7973b2255/',
-  classic: 'https://jashparmar.com/',
+  classic: 'https://jashparmar.com/classic/',
 };
 export const PERSON = { name: 'Jash Parmar', role: 'Software developer', company: 'Flitzen Technologies', location: 'India', tz: 'Asia/Kolkata', portrait: 'img/jash-parmar-288.webp' };
