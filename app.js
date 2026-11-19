@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import * as CANNON from './vendor/cannon-es.js?v=1';
-import { PROJECTS as P, HOW, EXPERIENCE, EDUCATION, ABOUT, STATS, CONTACT, PERSON } from './content.js?v=1';
-import { FORMS, POOL } from './forms.js?v=1';
-import { vert, frag, blueprint } from './screens.js?v=1';
+import * as CANNON from './vendor/cannon-es.js?v=3';
+import { PROJECTS as P, HOW, EXPERIENCE, EDUCATION, ABOUT, STATS, CONTACT, PERSON } from './content.js?v=3';
+import { FORMS, POOL } from './forms.js?v=3';
+import { vert, frag, blueprint } from './screens.js?v=3';
 
 /* ================= helpers ================= */
 const N = P.length;
@@ -85,7 +85,7 @@ themeB.addEventListener('click', () => setTheme(!night));
 
 /* ================= smooth scroll (fine pointers only) ================= */
 let lenis = null;
-if (!reduce && fine) { try { const { default: Lenis } = await import('./vendor/lenis.mjs?v=1'); lenis = new Lenis({ lerp: 0.085 }); } catch { lenis = null; } }
+if (!reduce && fine) { try { const { default: Lenis } = await import('./vendor/lenis.mjs?v=3'); lenis = new Lenis({ lerp: 0.085 }); } catch { lenis = null; } }
 const scrollToY = (y, imm) => { if (lenis) lenis.scrollTo(y, { duration: imm ? 0 : 1.6, immediate: !!imm, force: true }); else window.scrollTo({ top: y, behavior: imm || reduce ? 'auto' : 'smooth' }); };
 document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
   const id = a.getAttribute('href').slice(1); const el = id === 'top' ? null : document.getElementById(id);
@@ -217,7 +217,7 @@ if (!renderer) {
 
 function run3D() {
   const weak = !fine || (navigator.hardwareConcurrency || 8) <= 4;
-  const PR_MAX = Math.min(devicePixelRatio || 1, fine ? 1.75 : 1.5);
+  const PR_MAX = Math.min(devicePixelRatio || 1, fine ? 1.75 : 1.3);
   let pr = PR_MAX;
   renderer.setPixelRatio(pr);
   renderer.setClearColor(0x000000, 0);
@@ -241,8 +241,9 @@ function run3D() {
   const geo = new THREE.CylinderGeometry(R, R, H, 64, 12, true, -ARC / 2, ARC);
   const panels = [];
   const loader = new THREE.TextureLoader();
+  const BLANK = new THREE.DataTexture(new Uint8Array([236, 235, 230, 255]), 1, 1); BLANK.needsUpdate = true;
   let loaded = 0;
-  const countEl = $('.loader .count'); const LOAD_T0 = performance.now();
+  const countEl = $('.loader .count'); const LOAD_T0 = performance.now(); const NEED = Math.min(3, N);
   const lParts = [...document.querySelectorAll('.l-parts li')];
   let shownP = 0, targetP = 0;
   function loadProgress(f, name) { targetP = f; if (name) $('.lname').textContent = 'Unpacking: ' + name; }
@@ -255,7 +256,7 @@ function run3D() {
   });
   P.forEach((p, i) => {
     const u = {
-      uTex: { value: null }, uBack: { value: null }, uIA: { value: 1.6 }, uPA: { value: W / H }, uHover: { value: 0 }, uActive: { value: 0.6 }, uVel: { value: 0 },
+      uTex: { value: BLANK }, uBack: { value: null }, uIA: { value: 1.6 }, uPA: { value: W / H }, uHover: { value: 0 }, uActive: { value: 0.6 }, uVel: { value: 0 },
       uMirror: { value: 0 }, uFogN: { value: 12 }, uFogF: { value: 34 }, uPaper: { value: PAPER }, uInk: { value: INKC }, uAcc: { value: new THREE.Color(p.c) },
       uMouse: { value: new THREE.Vector2(.5, .5) }, uDim: { value: .18 }, uScroll: { value: 0 }, uFade: { value: 1 }, uFlip: { value: 0 }, uLit: { value: 0 }, uFlash: { value: 0 },
     };
@@ -270,9 +271,9 @@ function run3D() {
     loader.load(p.img, tex => {
       tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = Math.min(8, maxAniso); tex.minFilter = THREE.LinearMipmapLinearFilter;
       u.uTex.value = tex; u.uIA.value = tex.image.width / tex.image.height;
-      loaded++; loadProgress(loaded / N, p.t);
-      if (loaded === N) setTimeout(start, Math.max(900, 2600 - (performance.now() - LOAD_T0)));
-    }, undefined, () => { loaded++; if (loaded === N) setTimeout(start, 350); });
+      loaded++; loadProgress(Math.min(1, loaded / NEED), p.t);
+      if (loaded === NEED) setTimeout(start, Math.max(600, 2300 - (performance.now() - LOAD_T0)));
+    }, undefined, () => { loaded++; if (loaded === NEED) setTimeout(start, 350); });
   });
   const floorRing = new THREE.Mesh(new THREE.TorusGeometry(R, 0.012, 6, 240), new THREE.MeshBasicMaterial({ color: INKC.clone(), transparent: true, opacity: 0.18, toneMapped: false }));
   floorRing.rotation.x = Math.PI / 2; floorRing.position.y = FLOOR; ring.add(floorRing);
@@ -557,6 +558,7 @@ function run3D() {
       ray.setFromCamera(toNdc(e), camera);
       if (ray.ray.intersectPlane(handPlane, hit)) shake(hit.x, hit.z, false);
     } else if (phase === 'proj' || phase === 'dive') {
+      if (!fine) { ray.setFromCamera(toNdc(e), camera); hoverObj = ray.intersectObjects(pieces.filter(pc => inForm(pc, active)).map(pc => pc.mesh), false).length > 0; }
       if (hoverObj) toggleApart();
       else if (hoverPanel >= 0 && hoverPanel === active) openCase(active);
     } else if ((phase === 'asm') && hoverPanel >= 0) goProject(hoverPanel);
@@ -574,7 +576,7 @@ function run3D() {
 
   /* ---------- per-frame state ---------- */
   let phase = 'hero', lastPhase = 'hero', active = -1, diveK = 0, apartNow = 0;
-  let started = false, startAt = 0, intro = 0, t0 = performance.now(), raf = 0, frames = 0, slow = 0, level = 0, shadowEvery = 1;
+  let started = false, startAt = 0, intro = 0, t0 = performance.now(), raf = 0, frames = 0, slow = 0, level = weak ? 3 : 0, shadowEvery = weak ? 12 : 1;
   let ringY = Math.PI, vel = 0, lastY = scrollY;
   const camPos = new THREE.Vector3(), camLook = new THREE.Vector3(), tv = new THREE.Vector3(), tv2 = new THREE.Vector3();
   const ringQ = new THREE.Quaternion(), ringS = new THREE.Vector3(), spinQ = new THREE.Quaternion(), tiltQ = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.16, 0, 0)), formQ = new THREE.Quaternion();

@@ -73,34 +73,32 @@ export function blueprint(p, i, nodes, maxAniso) {
   for (let x = 0; x <= 1600; x += 40) { c.beginPath(); c.moveTo(x + .5, 0); c.lineTo(x + .5, 1000); c.stroke(); }
   for (let y = 0; y <= 1000; y += 40) { c.beginPath(); c.moveTo(0, y + .5); c.lineTo(1600, y + .5); c.stroke(); }
   c.fillStyle = 'rgba(236,235,230,.55)'; c.font = '500 22px "JetBrains Mono", monospace';
-  c.fillText('HOW IT WORKS  /  ' + pad2(i + 1), 80, 96);
+  c.fillText('THE BACK OF THE SCREEN  /  ' + pad2(i + 1), 80, 96);
   c.fillStyle = '#ecebe6'; c.font = '600 84px "Inter Tight", sans-serif'; c.fillText(p.t, 76, 186);
   c.fillStyle = p.c; c.font = 'italic 40px "Instrument Serif", serif'; c.fillText(p.hook, 80, 240);
-  const bw = 400, bh = 150, gx = 110, x0 = 80, rows = [330, 640];
-  const pos = nodes.map((_, j) => { const r = j < 3 ? 0 : 1, col = r === 0 ? j : 5 - j; return [x0 + col * (bw + gx), rows[r]]; });
-  c.lineWidth = 3; c.strokeStyle = p.c; c.fillStyle = p.c;
-  const arrow = (x1, y1, x2, y2) => { c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2, y2); c.stroke(); const a = Math.atan2(y2 - y1, x2 - x1); c.beginPath(); c.moveTo(x2, y2); c.lineTo(x2 - 16 * Math.cos(a - .45), y2 - 16 * Math.sin(a - .45)); c.lineTo(x2 - 16 * Math.cos(a + .45), y2 - 16 * Math.sin(a + .45)); c.closePath(); c.fill(); };
-  for (let j = 0; j < pos.length - 1; j++) {
-    const [ax, ay] = pos[j], [bx, by] = pos[j + 1];
-    if (ay === by) { const dir = bx > ax ? 1 : -1; arrow(dir > 0 ? ax + bw + 8 : ax - 8, ay + bh / 2, dir > 0 ? bx - 10 : bx + bw + 10, by + bh / 2); }
-    else { c.setLineDash([10, 8]); arrow(ax + bw / 2, ay + bh + 8, bx + bw / 2, by - 10); c.setLineDash([]); }
-  }
-  nodes.forEach(([t, sub], j) => {
-    const [x, y] = pos[j];
-    c.fillStyle = '#1b1b19'; c.strokeStyle = 'rgba(236,235,230,.55)'; c.lineWidth = 2;
-    c.beginPath(); c.roundRect(x, y, bw, bh, 18); c.fill(); c.stroke();
-    c.fillStyle = p.c; c.font = '500 20px "JetBrains Mono", monospace'; c.fillText(pad2(j + 1), x + 24, y + 42);
-    c.fillStyle = '#ecebe6';
-    for (let fs = 31; fs >= 22; fs--) { c.font = `600 ${fs}px "Inter Tight", sans-serif`; if (c.measureText(t).width <= bw - 48) break; }
-    c.fillText(t, x + 24, y + 86);
-    c.fillStyle = 'rgba(236,235,230,.6)'; c.font = '400 18px "JetBrains Mono", monospace';
-    const words = sub.split(' '), ln = [''];
-    for (const w of words) { const tryL = (ln[ln.length - 1] + ' ' + w).trim(); if (c.measureText(tryL).width > bw - 48 && ln[ln.length - 1]) ln.push(w); else ln[ln.length - 1] = tryL; }
-    ln.slice(0, 2).forEach((l, n) => c.fillText(l, x + 24, y + 118 + n * 22));
+  // the back of the screen carries the engineering notes; the object's labels carry the steps
+  const wrap = (text, maxW) => { const words = text.split(' '), ln = ['']; for (const w of words) { const t = (ln[ln.length - 1] + ' ' + w).trim(); if (c.measureText(t).width > maxW && ln[ln.length - 1]) ln.push(w); else ln[ln.length - 1] = t; } return ln; };
+  c.fillStyle = 'rgba(236,235,230,.5)'; c.font = '500 20px "JetBrains Mono", monospace'; c.fillText('ENGINEERING NOTES', 80, 330);
+  c.strokeStyle = 'rgba(236,235,230,.18)'; c.lineWidth = 2; c.beginPath(); c.moveTo(80, 352); c.lineTo(1520, 352); c.stroke();
+  let y = 420;
+  (p.b || []).forEach((t, j) => {
+    c.fillStyle = p.c; c.font = '500 26px "JetBrains Mono", monospace'; c.fillText(pad2(j + 1), 80, y);
+    c.fillStyle = '#ecebe6'; c.font = '500 40px "Inter Tight", sans-serif';
+    const ln = wrap(t, 1330).slice(0, 3);
+    ln.forEach((l, n) => c.fillText(l, 170, y + n * 52));
+    y += ln.length * 52 + 46;
   });
+  c.fillStyle = 'rgba(236,235,230,.5)'; c.font = '500 20px "JetBrains Mono", monospace'; c.fillText('BUILT WITH', 80, Math.max(y + 10, 760));
+  let x = 80; const cy = Math.max(y + 40, 790);
+  c.font = '500 24px "JetBrains Mono", monospace';
+  for (const tag of String(p.s || '').split(' · ')) {
+    const w = c.measureText(tag).width + 36; if (x + w > 1520) break;
+    c.strokeStyle = 'rgba(236,235,230,.4)'; c.lineWidth = 2; c.beginPath(); c.roundRect(x, cy, w, 52, 26); c.stroke();
+    c.fillStyle = '#ecebe6'; c.fillText(tag, x + 18, cy + 34); x += w + 14;
+  }
   c.fillStyle = 'rgba(236,235,230,.45)'; c.font = '400 20px "JetBrains Mono", monospace';
   c.fillText('FRONT: THE PRODUCT.  BACK: THE ENGINEERING.', 80, 930);
-  c.textAlign = 'right'; c.fillText(p.s.toUpperCase(), 1520, 930);
+  c.textAlign = 'right'; c.fillText('THE STEPS ARE ON THE PARTS IN FRONT', 1520, 930); c.textAlign = 'left';
   const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = Math.min(8, maxAniso);
   return tex;
 }
