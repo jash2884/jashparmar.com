@@ -87,10 +87,10 @@ export const PROJECTS = [
     "hook": "see every step of the algorithm",
     "img": "img/stepwise.webp",
     "c": "#4d6bff",
-    "d": "62 step-by-step visualisers for DSA, operating systems, databases, networks, automata and compilers, with GATE-style practice.",
+    "d": "An all-in-one CS study site: 89 step-by-step visualisers in 11 subjects, 8 roadmaps, GATE-style practice and timed mocks.",
     "b": [
-      "Live pseudocode and variables on every step, with optional three.js 3D views.",
-      "An AI tutor for the step on screen, and 350+ textbook and fuzz tests."
+      "Live pseudocode and variables on every step, from DSA and OS to digital logic, maths and AI.",
+      "72 GATE question generators, roadmaps with mastery tracking, spaced repetition and 560+ tests."
     ],
     "s": "JavaScript · Three.js · SVG · Workers AI · Cloudflare",
     "l": [
@@ -105,8 +105,8 @@ export const PROJECTS = [
     ],
     "cs": [
       "Students learn algorithms and operating systems from static diagrams, so they never see what actually changes at each step.",
-      "62 step-by-step visualisers across DSA, operating systems, databases, networks, automata and compilers, each with live pseudocode and variables, optional 3D views, an AI tutor for the step on screen and GATE-style practice.",
-      "Every engine is a pure function checked against textbook answers and random fuzz inputs, with 350+ tests and a search-friendly page for every tool."
+      "89 step-by-step visualisers across 11 subjects (DSA, OS, DBMS, networks, theory, compilers, digital logic, COA, discrete maths, engineering maths and AI), with 8 roadmaps, 72 GATE question generators, timed mocks, spaced repetition, a study planner and a Ctrl+K command palette.",
+      "Every engine is a pure function checked against textbook answers and random fuzz inputs, with 560+ tests. Progress stays on the device, and every tool and roadmap stage has its own search-friendly page."
     ]
   },
   {
@@ -325,7 +325,7 @@ export const HOW = {
   "stepwise": [
     [
       "Pick an algorithm",
-      "62 visualisers"
+      "89 visualisers"
     ],
     [
       "Step engine",
@@ -344,7 +344,7 @@ export const HOW = {
       "about the step on screen"
     ],
     [
-      "350+ tests",
+      "560+ tests",
       "textbook + fuzz"
     ]
   ],

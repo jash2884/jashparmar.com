@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import * as CANNON from './vendor/cannon-es.js?v=3';
-import { PROJECTS as P, HOW, EXPERIENCE, EDUCATION, ABOUT, STATS, CONTACT, PERSON } from './content.js?v=7';
+import { PROJECTS as P, HOW, EXPERIENCE, EDUCATION, ABOUT, STATS, CONTACT, PERSON } from './content.js?v=8';
 import { FORMS, poolFor } from './forms.js?v=5';
 import { vert, frag, blueprint } from './screens.js?v=5';
 
