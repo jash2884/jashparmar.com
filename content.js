@@ -83,20 +83,20 @@ export const PROJECTS = [
   },
   {
     "k": "stepwise",
-    "t": "Stepwise",
-    "hook": "see every step of the algorithm",
-    "img": "img/stepwise.webp",
-    "c": "#4d6bff",
-    "d": "An all-in-one CS study site: 89 step-by-step visualisers in 11 subjects, 8 roadmaps, GATE-style practice and timed mocks.",
+    "t": "drishi",
+    "hook": "see how it works",
+    "img": "img/drishi.webp",
+    "c": "#006a7b",
+    "d": "A minimal 3D study site for computer science: 89 step-by-step visualisers, 8 roadmaps, GATE-style practice, and a question box answered on your device.",
     "b": [
-      "Live pseudocode and variables on every step, from DSA and OS to digital logic, maths and AI.",
-      "72 GATE question generators, roadmaps with mastery tracking, spaced repetition and 560+ tests."
+      "A 1.6 MB model I trained picks the right visualiser on your device: 94.8% right on 267 unseen questions.",
+      "One three.js scene of 1,500 blocks forms an eye, then rebuilds itself for every subject."
     ],
-    "s": "JavaScript · Three.js · SVG · Workers AI · Cloudflare",
+    "s": "JavaScript · Three.js · On-device ML · Workers AI · Cloudflare",
     "l": [
       [
         "Learn a step",
-        "https://stepwise.jashparmar.com"
+        "https://drishi.jashparmar.com"
       ],
       [
         "Code",
@@ -104,9 +104,9 @@ export const PROJECTS = [
       ]
     ],
     "cs": [
-      "Students learn algorithms and operating systems from static diagrams, so they never see what actually changes at each step.",
-      "89 step-by-step visualisers across 11 subjects (DSA, OS, DBMS, networks, theory, compilers, digital logic, COA, discrete maths, engineering maths and AI), with 8 roadmaps, 72 GATE question generators, timed mocks, spaced repetition, a study planner and a Ctrl+K command palette.",
-      "Every engine is a pure function checked against textbook answers and random fuzz inputs, with 560+ tests. Progress stays on the device, and every tool and roadmap stage has its own search-friendly page."
+      "Students learn algorithms from static diagrams, and AI chatbots can get the numbers wrong with confidence.",
+      "89 step-by-step visualisers in 11 subjects with roadmaps, 72 GATE question generators, mocks, spaced repetition and a mistake doctor. Typed questions are read on the device, and the visualiser's own engine works out the answer.",
+      "The router scored 94.8% on 267 questions written without sight of its training data, and it declines when a number in the question is left unread. 631 tests, each engine checked against textbook answers and random inputs."
     ]
   },
   {
@@ -344,7 +344,7 @@ export const HOW = {
       "about the step on screen"
     ],
     [
-      "560+ tests",
+      "630+ tests",
       "textbook + fuzz"
     ]
   ],
