@@ -2,7 +2,7 @@
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 THREE.ColorManagement.enabled = false;
-export const G = { axis: { value: new THREE.Vector2() }, cell: { value: 6 }, ang: { value: 0 }, res: { value: new THREE.Vector2(1, 1) }, line: { value: 3 }, time: { value: 0 }, sun: { value: new THREE.Vector3(-0.5, 0.72, 0.62) }, mouse: { value: new THREE.Vector3(-9999, 0, 0) } };
+export const G = { axis: { value: new THREE.Vector2() }, cell: { value: 6 }, ang: { value: 0 }, res: { value: new THREE.Vector2(1, 1) }, line: { value: 3 }, time: { value: 0 }, sun: { value: new THREE.Vector3(-0.5, 0.72, 0.62) }, mouse: { value: new THREE.Vector3(-9999, 0, 0) }, point: new THREE.Vector3(0, 0, 2) };
 const C = (c) => new THREE.Color(c), lerp = (a, b, t) => C(a).lerp(C(b), t);
 export const DOTS = `uniform vec2 axis; uniform float cell, ang;
 float dots(float dark){ vec2 p=gl_FragCoord.xy-axis; float s=sin(ang+.5),c=cos(ang+.5); p=mat2(c,-s,s,c)*p/cell; float d=length(fract(p)-.5), r=sqrt(clamp(dark,0.,1.))*.73, aa=.8/cell;
@@ -30,6 +30,7 @@ const smooth = (g) => {
 };
 const cache = new Map(), once = (k, f) => { if (!cache.has(k)) cache.set(k, smooth(f())); return cache.get(k); };
 export const geo = {
+  smooth: (g) => smooth(g),
   box: (w, h, d, r = 0.12) => once(`b${[w, h, d, r]}`, () => new RoundedBoxGeometry(w, h, d, 3, Math.min(r, w / 2.01, h / 2.01, d / 2.01))),
   cyl: (r, h, r2 = r, s = 40) => once(`c${[r, h, r2, s]}`, () => new THREE.CylinderGeometry(r2, r, h, s)),
   disc: (r, h, s = 56) => once(`d${[r, h, s]}`, () => new THREE.CylinderGeometry(r, r, h, s).rotateX(Math.PI / 2)),
