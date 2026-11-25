@@ -1,18 +1,18 @@
 import { THREE, G } from "./ink.js?v=1";
 import { build } from "./worlds.js?v=1";
-import { PROJECTS, EXPERIENCE, EDUCATION, ABOUT, CONTACT } from "./content.js?v=1";
+import { PROJECTS, EXPERIENCE, EDUCATION, ABOUT, CONTACT, STATS, PERSON } from "./content.js?v=1";
 const $ = (i) => document.getElementById(i), h = (t, a = {}, ...k) => { const e = document.createElement(t); for (const [n, v] of Object.entries(a)) n.startsWith("on") ? e.addEventListener(n.slice(2), v) : e.setAttribute(n, v); e.append(...k.flat().filter((x) => x != null)); return e; };
 const link = (t, u, two) => h("a", { href: u, ...(two ? { class: "two" } : {}), ...(u.startsWith("http") || u.endsWith("24") ? { target: "_blank", rel: "noopener" } : {}) }, t);
 const ORDER = ["crate", "drape", "wrapped", "stepwise", "agentproof", "slotwise", "invites", "matchday", "tonight"], P = ORDER.map((k) => PROJECTS.find((p) => p.k === k)), N = 11, mod = (a, n) => ((a % n) + n) % n;
 const LOOK = [ // paper, ink, text, yaw, pitch
   ["#2b3cff", "#0b0a3d", "#fff6df", -0.2, 0.14], ["#ff5a1f", "#2a0b18", "#2a0b18", -0.26, 0.2], ["#ffb7d8", "#4a0636", "#4a0636", -0.22, 0.06], ["#12c26b", "#03301c", "#03301c", -0.24, 0.1], ["#dff6f2", "#06303a", "#06303a", -0.2, 0.1], ["#6b3bf5", "#160447", "#ffffff", -0.24, 0.08], ["#ffd52e", "#1d2400", "#1d2400", -0.28, 0.16], ["#a3123f", "#36021a", "#ffeccb", -0.22, 0.1], ["#17a34a", "#04240f", "#04240f", -0.2, -0.5], ["#0b0e3f", "#05061f", "#fff6df", -0.1, 0.1], ["#ff8a6b", "#3a0f2c", "#3a0f2c", -0.22, 0.16]];
 const calm = matchMedia("(prefers-reduced-motion: reduce)").matches, tall = innerWidth / innerHeight < 0.8, K = 10, D0 = 10;
-const land = await fetch("land.json?v=1").then((r) => r.json()), W = build(tall, land);
-const rd = new THREE.WebGLRenderer({ canvas: $("c"), antialias: true, stencil: true, alpha: false, powerPreference: "high-performance" }); rd.outputColorSpace = THREE.LinearSRGBColorSpace; rd.autoClear = false;
+const land = await fetch(new URL("./land.json?v=1", import.meta.url)).then((r) => r.json()), W = build(tall, land);
+let rd; try { rd = new THREE.WebGLRenderer({ canvas: $("c"), antialias: true, stencil: true, alpha: false, powerPreference: "high-performance" }); } catch (e) { document.documentElement.classList.add("plain"); throw e; } rd.outputColorSpace = THREE.LinearSRGBColorSpace; rd.autoClear = false;
 let q = Math.min(devicePixelRatio, tall ? 1.75 : 1.5), w = 1, ht = 1; const cam = new THREE.PerspectiveCamera();
 const size = () => { w = innerWidth; ht = innerHeight; rd.setPixelRatio(q); rd.setSize(w, ht, false); G.res.value.set(w * q, ht * q); }; size(); addEventListener("resize", size);
 // which part of the screen each world is centred on, and how much of it must fit
-const AX = (i) => (tall ? [0.56, i === 0 ? 0.26 : 0.31] : [i === 0 ? 0.36 : 0.68, i === 0 ? 0.44 : 0.53]), FIT = (i) => (tall ? (i === 0 ? 3.4 : 3.35) : i === 0 ? 4.5 : 4.1);
+const AX = (i) => (tall ? [0.56, i === 0 ? 0.26 : 0.31] : [i === 0 ? 0.385 : 0.68, i === 0 ? 0.44 : 0.53]), FIT = (i) => (tall ? (i === 0 ? 3.4 : 3.35) : i === 0 ? 4.5 : 4.1);
 const at = (f, p) => { const i = Math.floor(p), t = p - i, s = t * t * (3 - 2 * t), a = f(mod(i, N)), b = f(mod(i + 1, N)); return Array.isArray(a) ? a.map((v, n) => v + (b[n] - v) * s) : a + (b - a) * s; };
 let p = calm ? 0 : 4, to = 0, v = 0, mx = 0, my = 0, ox = 0, oy = 0, intro = calm ? 1 : 0, shown = -1, idle = 0, falling = false, T = 0;
 function draw(dt) {
@@ -32,16 +32,16 @@ function draw(dt) {
 function say(i) {
   if (i === shown) return; shown = i; const [pa, ink, tx] = LOOK[i], r = document.documentElement.style; r.setProperty("--paper", pa); r.setProperty("--ink", ink); r.setProperty("--txt", tx); document.querySelector("meta[name=theme-color]").content = pa;
   const el = $("panel"); el.className = i === 0 ? "hero" : ""; $("home").style.visibility = i ? "" : "hidden"; const pr = P[i - 1];
-  el.replaceChildren(...(i === 0 ? [h("h1", {}, "I’m Jash Parmar. I build small, clever products."), h("p", { class: "hook" }, "Software developer. Nine projects, each hiding inside the last. Scroll to fall in.")]
-    : i === 10 ? [h("h2", {}, "Say hello"), h("p", { class: "hook" }, CONTACT.email), h("p", { class: "d" }, "I’m happy to talk about work, or about any of these projects. Keep scrolling and you fall back to the start."), h("div", { class: "links" }, link("Email me", `mailto:${CONTACT.email}`), link("Résumé", CONTACT.resume, 1), link("GitHub", CONTACT.github, 1), link("LinkedIn", CONTACT.linkedin, 1))]
+  el.replaceChildren(...(i === 0 ? [h("h1", {}, "I’m Jash Parmar. I build small, clever products."), h("p", { class: "hook" }, "Software developer in India, open to SDE and FDE roles. Nine projects, each hiding inside the last. Scroll to fall in.")]
+    : i === 10 ? [h("h2", {}, "Say hello"), h("p", { class: "hook" }, CONTACT.email), h("p", { class: "d" }, "I’m happy to talk about work, or about any of these projects. Keep scrolling and you fall back to the start."), h("div", { class: "links" }, link("Email me", `mailto:${CONTACT.email}`), ...CONTACT.resumes.map(([t, u]) => link(t === "Software developer" ? "SDE résumé" : "FDE résumé", u, 1)), link("GitHub", CONTACT.github, 1), link("LinkedIn", CONTACT.linkedin, 1))]
     : [h("h2", {}, pr.t), h("p", { class: "hook" }, pr.hook[0].toUpperCase() + pr.hook.slice(1)), h("p", { class: "d" }, pr.d), h("div", { class: "links" }, link(pr.l[0][0], pr.l[0][1]), h("button", { type: "button", class: "two", onclick: () => more(pr) }, "How I built it"))]));
   $("zoom").lastChild.textContent = i === 0 ? "the surface" : i === 10 ? "the desk" : `${pr.t}, ${i} of 9`;
 }
 let addr = -1; const address = (i) => { if (addr !== i) { addr = i; history.replaceState(null, "", i ? `#${P[i - 1]?.k ?? "hello"}` : location.pathname); } };
 const open = (...k) => { const d = $("sheet"); d.className = "light"; d.replaceChildren(h("button", { class: "x", type: "button", "aria-label": "Close", onclick: () => d.close() }, "×"), ...k.flat()); d.scrollTop = 0; d.showModal(); };
-const more = (pr) => open(h("img", { src: pr.img, alt: `${pr.t} screenshot`, width: 1200, height: 750 }), h("h2", { id: "sh" }, pr.t), ["The problem", "What I built", "How it turned out"].flatMap((t, i) => [h("h3", {}, t), h("p", {}, pr.cs[i])]), h("h3", {}, "Under the bonnet"), pr.b.map((x) => h("p", {}, x)), h("p", {}, pr.s.replaceAll(" · ", ", ")), h("div", { class: "links" }, pr.l.map(([t, u], i) => link(t, u, i))));
+const more = (pr) => open(h("img", { src: pr.img, alt: `${pr.t} screenshot`, width: 1280, height: 800 }), h("h2", { id: "sh" }, pr.t), ["The problem", "What I built", "How it turned out"].flatMap((t, i) => [h("h3", {}, t), h("p", {}, pr.cs[i])]), h("h3", {}, "Under the bonnet"), pr.b.map((x) => h("p", {}, x)), h("p", {}, pr.s.replaceAll(" · ", ", ")), h("div", { class: "links" }, pr.l.map(([t, u], i) => link(t, u, i))));
 $("list").onclick = () => open(h("h2", { id: "sh" }, "All projects"), h("ol", {}, P.map((pr, i) => h("li", {}, h("button", { type: "button", style: `--k:${LOOK[i + 1][0]}`, onclick: () => { $("sheet").close(); go(i + 1); } }, h("img", { src: pr.img, alt: "", loading: "lazy" }), h("div", {}, h("b", {}, pr.t), h("span", {}, pr.hook[0].toUpperCase() + pr.hook.slice(1))))))), h("div", { class: "links" }, h("button", { type: "button", class: "two", onclick: about }, "About me")));
-function about() { open(h("h2", { id: "sh" }, "About"), h("p", {}, ABOUT), EXPERIENCE.flatMap((e) => [h("h3", {}, `${e.role}, ${e.org}`), h("p", {}, e.when.replace("·", "to")), h("p", {}, e.what)]), h("h3", {}, "Education"), h("p", {}, EDUCATION)); } $("about").onclick = about;
+function about() { open(h("h2", { id: "sh" }, "About"), h("img", { class: "me", src: PERSON.portrait, alt: "Jash Parmar", width: 288, height: 318 }), h("p", {}, ABOUT), h("ul", { class: "stats" }, STATS.map(([n, l]) => h("li", {}, h("b", {}, n), l))), EXPERIENCE.flatMap((e) => [h("h3", {}, `${e.role}, ${e.org}`), h("p", {}, e.when.replace("·", "to")), h("p", {}, e.what)]), h("h3", {}, "Education"), h("p", {}, EDUCATION), h("div", { class: "links" }, ...CONTACT.resumes.map(([t, u], i) => link(i ? "FDE résumé" : "SDE résumé", u, i)), link("Classic site", "/classic/", 1))); } $("about").onclick = about;
 $("contact").onclick = () => go(10); $("home").onclick = () => go(0);
 // travel
 const stop = () => { if (intro < 1) { intro = 1; to = Math.round(p); } falling = false; $("fall").textContent = "Fall through everything"; };

@@ -48,7 +48,7 @@ export class World {
       vertexShader: "void main(){ gl_Position=vec4(position.xy,1.,1.); }",
       fragmentShader: `uniform vec3 a,b; uniform vec2 res; uniform float time; ${DOTS}
 void main(){ vec2 p=gl_FragCoord.xy-axis; float s=sin(ang),c=cos(ang); p=mat2(c,-s,s,c)*p; float u=cell*26., r=length(p)/u, t=atan(p.y,p.x), k=0.;
- ${["k=smoothstep(.2,7.,r)*.8;", "k=step(.5,fract(t/6.28318*14.+time*.012));", "k=step(.5,fract(r*.55-time*.05));", "k=step(.5,fract(p.x/u*.5));", "k=dot(p,vec2(.0,-1.))/u*.12+.45;", "vec2 q=fract(p/u*.8)-.5; k=step(length(q),.13);", "k=step(.5,fract((p.x+p.y)/u*.35));", "vec2 q=p/u*1.1; vec2 f=floor(q); k=mod(f.x+f.y,2.);"][pattern]}
+ ${["k=smoothstep(.2,7.,r)*.8;", "k=step(.5,fract(t/6.28318*14.+time*.012));", "k=step(.5,fract(r*.55-time*.05));", "k=step(.5,fract(p.x/u*.5));", "k=dot(p,vec2(.0,-1.))/u*.12+.45;", "vec2 g=p/u*.9, f=floor(g); float n=fract(sin(dot(f,vec2(12.9,78.2)))*43758.5); vec2 q=fract(g)-.5-vec2(n-.5,fract(n*7.)-.5)*.6; k=step(length(q),.015+.035*fract(n*13.));", "k=step(.5,fract((p.x+p.y)/u*.35));", "vec2 q=p/u*1.1; vec2 f=floor(q); k=mod(f.x+f.y,2.);"][pattern]}
  ${[0, 4].includes(pattern) ? "gl_FragColor=vec4(mix(a,b,dots(clamp(k,0.,.95))),1.);" : "gl_FragColor=vec4(mix(a,b,k),1.);"} }` }))); bg.frustumCulled = false; bg.renderOrder = -999; this.scene.add(bg);
   }
   keep(m) { this.mats.push(m); return m; }
@@ -62,7 +62,7 @@ void main(){ vec2 p=gl_FragCoord.xy-axis; float s=sin(ang),c=cos(ang); p=mat2(c,
     if (o.line !== 0) m.add(new THREE.Mesh(g, this.hull)); (o.to ?? this.scene).add(m); return m;
   }
   many(g, list, o = {}) { // list of {x,y,z,r,s,c}
-    const mat = this.mat("#ffffff", { b: o.b ?? "#8a8a9a", hl: o.hl ?? 0 }), m = new THREE.InstancedMesh(g, mat, list.length), d = new THREE.Object3D(); m.frustumCulled = false;
+    if (!g.attributes.sn) smooth(g); const mat = this.mat("#ffffff", { b: o.b ?? "#8a8a9a", hl: o.hl ?? 0 }), m = new THREE.InstancedMesh(g, mat, list.length), d = new THREE.Object3D(); m.frustumCulled = false;
     m.set = (i, q) => { d.position.set(q.x, q.y, q.z ?? 0); d.rotation.set(...(q.r ?? [0, 0, 0])); Array.isArray(q.s) ? d.scale.set(...q.s) : d.scale.setScalar(q.s ?? 1); d.updateMatrix(); m.setMatrixAt(i, d.matrix); m.instanceMatrix.needsUpdate = true; };
     list.forEach((q, i) => { m.set(i, q); m.setColorAt(i, C(q.c)); }); if (o.line !== 0) { const l = new THREE.InstancedMesh(g, this.hull, list.length); l.instanceMatrix = m.instanceMatrix; l.frustumCulled = false; m.add(l); } (o.to ?? this.scene).add(m); return m;
   }

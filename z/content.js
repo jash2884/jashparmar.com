@@ -5,7 +5,7 @@ export const PROJECTS = [
     "k": "crate",
     "t": "Crate",
     "hook": "a record crate for your own files",
-    "img": "img/crate.webp",
+    "img": "z/img/crate.webp",
     "c": "#ff6a2b",
     "d": "Your own music files, turned into a 3D record crate and a turntable you can actually scratch. Nothing is uploaded; it all runs on your device.",
     "b": [
@@ -29,7 +29,7 @@ export const PROJECTS = [
     "k": "drape",
     "t": "Drape",
     "hook": "Shazam, but for outfits",
-    "img": "img/drape.webp",
+    "img": "z/img/drape.webp",
     "c": "#e5487f",
     "d": "Screenshot any look and Drape finds every piece, the exact item for sale and cheaper lookalikes.",
     "b": [
@@ -57,7 +57,7 @@ export const PROJECTS = [
     "k": "wrapped",
     "t": "Chat Wrapped",
     "hook": "your group chat, wrapped",
-    "img": "img/wrapped.webp",
+    "img": "z/img/wrapped.webp",
     "c": "#1fae5b",
     "d": "Spotify Wrapped for your WhatsApp and Telegram chats, analysed entirely on your device: a 20-slide story, a title for every member and a guess-who quiz.",
     "b": [
@@ -85,7 +85,7 @@ export const PROJECTS = [
     "k": "stepwise",
     "t": "drishi",
     "hook": "see how it works",
-    "img": "img/drishi.webp",
+    "img": "z/img/drishi.webp",
     "c": "#006a7b",
     "d": "A minimal 3D study site for computer science: 89 step-by-step visualisers, 8 roadmaps, GATE-style practice, and a question box answered on your device.",
     "b": [
@@ -106,14 +106,14 @@ export const PROJECTS = [
     "cs": [
       "Students learn algorithms from static diagrams, and AI chatbots can get the numbers wrong with confidence.",
       "89 step-by-step visualisers in 11 subjects with roadmaps, 72 GATE question generators, mocks, spaced repetition and a mistake doctor. Typed questions are read on the device, and the visualiser's own engine works out the answer.",
-      "The router scored 94.8% on 267 questions written without sight of its training data, and it declines when a number in the question is left unread. 631 tests, each engine checked against textbook answers and random inputs."
+      "The router scored 94.8% on 267 questions written without sight of its training data, and it declines when a number in the question is left unread. 638 tests, each engine checked against textbook answers and random inputs."
     ]
   },
   {
     "k": "agentproof",
     "t": "AgentProof",
     "hook": "evidence before every release",
-    "img": "img/agentproof.webp",
+    "img": "z/img/agentproof.webp",
     "c": "#119c8b",
     "d": "Release checks for teams shipping AI agents: import traces, assert business policies, compare versions and block unsafe releases in CI.",
     "b": [
@@ -137,7 +137,7 @@ export const PROJECTS = [
     "k": "slotwise",
     "t": "SlotWise",
     "hook": "no double bookings, ever",
-    "img": "img/slotwise.webp",
+    "img": "z/img/slotwise.webp",
     "c": "#3e7d3a",
     "d": "Mentor scheduling with authenticated booking, timezone-aware availability and double-booking blocked by the database itself.",
     "b": [
@@ -165,7 +165,7 @@ export const PROJECTS = [
     "k": "invites",
     "t": "Invite Sender",
     "hook": "built for a friend’s wedding",
-    "img": "img/invites.webp",
+    "img": "z/img/invites.webp",
     "c": "#c8901e",
     "d": "A private tool built for a friend’s wedding. Upload the guest list, design the invitation once, and every guest gets a personal WhatsApp message with their own name printed on the card.",
     "b": [
@@ -189,7 +189,7 @@ export const PROJECTS = [
     "k": "matchday",
     "t": "Matchday Brain",
     "hook": "predictions with an honest track record",
-    "img": "img/matchday.webp",
+    "img": "z/img/matchday.webp",
     "c": "#16a34a",
     "d": "Match predictions for football, cricket and the NFL from tuned Elo models, with every past prediction scored in public, so the model can be judged on unseen matches.",
     "b": [
@@ -217,7 +217,7 @@ export const PROJECTS = [
     "k": "tonight",
     "t": "Tonight, Everywhere",
     "hook": "one question for the whole world",
-    "img": "img/tonight.webp",
+    "img": "z/img/tonight.webp",
     "c": "#e3a320",
     "d": "One question a day for the whole world. Answer in a single line and your light appears on a night globe beside everyone else’s.",
     "b": [
@@ -503,4 +503,4 @@ export const CONTACT = {
     ]
   ]
 };
-export const PERSON = { name: 'Jash Parmar', role: 'Software developer', company: 'Flitzen Technologies', location: 'India', tz: 'Asia/Kolkata', portrait: 'img/jash-parmar-288.webp' };
+export const PERSON = { name: 'Jash Parmar', role: 'Software developer', company: 'Flitzen Technologies', location: 'India', tz: 'Asia/Kolkata', portrait: 'z/img/jash-parmar-288.webp' };
