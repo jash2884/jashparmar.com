@@ -62,7 +62,7 @@ function frame(now) {
   if (intro < 1) { intro = Math.min(1, intro + dt / 3.2); const e = 1 - (1 - intro) ** 3 * (1 + 0.0); p = 4 * (1 - e); to = 0; v = 0; }
   else if (falling) { const f = mod(p, 1); p += dt * (0.16 + 0.62 * (0.5 - 0.5 * Math.cos(f * 6.2832))); to = p; v = 0; }
   else { if (ty === null) { idle += dt; if (idle > 0.14 && Math.abs(to - Math.round(to)) > 0.001) to = dir > 0 ? Math.ceil(to - 0.1) : Math.floor(to + 0.1); } if (calm) { p = Math.round(to); } else { const o = 8.5; v += ((to - p) * o * o - 2 * o * v) * dt; p += v * dt; } if (ty === null && idle > 0.2 && Math.abs(p - to) < 0.0004 && Math.abs(v) < 0.001) { p = to; v = 0; if (p < 0 || p >= N) { p = to = mod(p, N); } } }
-  const r = Math.round(p), i = mod(r, N), off = p - r > 0.16 || r - p > 0.07 || (intro < 0.9 && intro > 0); if (i !== shown) { $("panel").classList.add("off"); say(i); } $("panel").classList.toggle("off", off); if (p === to && !off) address(i);
+  const r = Math.round(p), i = mod(r, N), off = p - r > 0.16 || r - p > 0.035 || (intro < 0.9 && intro > 0); if (i !== shown) { $("panel").classList.add("off"); say(i); } $("panel").classList.toggle("off", off); if (p === to && !off) address(i);
   const z = mod(p, N), zi = Math.floor(z), tx = z < 3 ? `${Math.round(10 ** z).toLocaleString("en-GB")}×` : `10<sup>${zi}</sup>×`; if (tx !== lastZ) $("zoom").firstChild.innerHTML = lastZ = tx;
   draw(dt);
   if (++seen > 40 && dt > 0.024 && dt < 0.05) { if (++slow > 45 && q > 0.8) { q = Math.max(0.8, q - 0.2); slow = 0; size(); } } else slow = Math.max(0, slow - 0.4);
