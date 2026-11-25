@@ -94,5 +94,6 @@ function frame(now) {
   if (++seen > 40 && dt > 0.024 && dt < 0.05) { if (++slow > 45 && q > 0.8) { q = Math.max(0.8, q - 0.2); slow = 0; size(); } } else slow = Math.max(0, slow - 0.4);
 }
 const hash = [null, ...ORDER, "hello"].indexOf(location.hash.slice(1).replace("drishi", "stepwise")); if (hash > 0) { p = to = hash; intro = 1; }
-W.forEach((x) => rd.compile(x.scene, cam)); document.fonts.ready.then(() => requestAnimationFrame(frame));
+// send every world to the graphics chip now, so no journey stutters the first time
+{ const hid = []; W.forEach((x) => { x.setLevel(0); x.scene.traverse((o) => { if (o.isMesh || o.isGroup) { if (!o.visible) { hid.push(o); o.visible = true; } if (o.isMesh && o.frustumCulled) { o.frustumCulled = false; hid.push([o]); } } }); rd.setViewport(0, 0, 4, 4); rd.render(x.scene, cam); }); hid.forEach((o) => (Array.isArray(o) ? (o[0].frustumCulled = true) : (o.visible = false))); rd.clear(); size(); } document.fonts.ready.then(() => requestAnimationFrame(frame));
 window.__s = () => ({ p, to, q, calls: rd.info.render.calls, stamp, got, cats, best, score, pick, W, set: (x) => { p = to = x; v = 0; intro = 1; }, step, go });
