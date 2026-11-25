@@ -12,20 +12,34 @@ const land = await fetch(new URL("./land.json?v=1", import.meta.url)).then((r) =
 let rd; try { rd = new THREE.WebGLRenderer({ canvas: $("c"), antialias: true, stencil: true, alpha: false, powerPreference: "high-performance" }); } catch (e) { document.documentElement.classList.add("plain"); throw e; } rd.outputColorSpace = THREE.LinearSRGBColorSpace; rd.autoClear = false;
 let q = Math.min(devicePixelRatio, tall ? 1.75 : 1.5), w = 1, ht = 1; const cam = new THREE.PerspectiveCamera(), eye = new THREE.PerspectiveCamera();
 const size = () => { w = innerWidth; ht = innerHeight; rd.setPixelRatio(q); rd.setSize(w, ht, false); G.res.value.set(w * q, ht * q); }; size(); addEventListener("resize", size);
-// which part of the screen each world is centred on, and how much of it must fit
-const AX = (i) => (tall ? [i === 8 ? 0.4 : 0.56, i === 0 ? 0.26 : i === 10 ? (innerHeight < 740 ? 0.2 : 0.27) : 0.31] : [i === 0 ? 0.385 : 0.68, i === 0 ? 0.42 : 0.53]), FIT = (i) => (tall ? (i === 0 ? 3.4 : i === 10 ? (innerHeight < 740 ? 5.2 : 4.0) : 3.35) : i === 0 ? (innerHeight < 720 ? 5.9 : 5.15) : 4.1);
+// How much of each world must be seen, in world units left, right, up and down of its centre.
+const EXT = (i) => (tall ? { 0: [3.5, 3.2, 3.5, 6.0], 6: [3.5, 3.2, 3.5, 3.5], 8: [3.1, 4.3, 3.5, 3.0], 9: [3.2, 3.1, 3.2, 3.2], 10: [3.6, 3.3, 3.7, 3.6] }[i] ?? [3.6, 3.1, 3.5, 3.4] : { 0: [5.0, 7.7, 3.5, 3.15], 4: [4.2, 4.8, 4.1, 3.9], 7: [4.2, 4.6, 4.1, 3.9], 8: [3.5, 4.8, 4.2, 3.6], 10: [4.0, 4.4, 4.0, 3.9] }[i] ?? [3.7, 4.6, 4.1, 3.9]), root = document.documentElement;
+// Frame every world inside whatever the words and the menu leave free.
+const V = Array.from({ length: N }, () => [0.5, 0.4, 60]), LV = Array(N).fill(""), LEVELS = ["", "l1", "l1 l2", "l1 l2 l3", "l1 l2 l3 l4"]; let booted = false;
+function fitAll() {
+  root.classList.toggle("stack", tall); root.classList.toggle("short", !tall && innerHeight < 520); const H = innerHeight, Wd = innerWidth, short = !tall && H < 520, hd = document.querySelector("header nav").getBoundingClientRect(), ft = document.querySelector("footer").getBoundingClientRect(), pt = short ? 8 : 84, pb = H - ft.top + (short ? 6 : 18); root.style.setProperty("--pt", pt + "px"); root.style.setProperty("--pb", pb + "px");
+  const g = h("div", { class: "panel", inert: "", "aria-hidden": "true", style: "visibility:hidden;z-index:-1;transition:none" }); document.body.append(g);
+  for (let i = 0; i < N; i++) {
+    g.replaceChildren(...panelNodes(i)); const kind = i === 0 ? " hero" : i === 10 ? " desk" : ""; let r; for (const l of LEVELS) { g.className = `panel${kind} ${l}`; LV[i] = l; r = g.getBoundingClientRect(); if (r.height <= (tall ? H * 0.53 : H - pt - pb)) break; }
+    let x = 0, y, X = Wd, Y; if (tall) { y = hd.bottom + 4; Y = H - r.height - 2; } else if (i === 0 && !short) { x = 12; X = Wd - 12; y = 12; Y = r.top - 8; } else { x = r.right + (short ? 10 : 20); X = Wd - 12; y = short ? hd.bottom + 2 : 14; Y = H - 10; }
+    const [l, rt, t, b] = EXT(i), rw = X - x, rh = Math.max(60, Y - y), sc = Math.min(rw / (l + rt), rh / (t + b)); V[i] = [(x + l * sc + (rw - (l + rt) * sc) / 2) / Wd, (y + t * sc + (rh - (t + b) * sc) / 2) / H, sc];
+  }
+  g.remove(); if (booted && shown >= 0) $("panel").className = panelClass(shown);
+}
+const panelClass = (i) => `panel${i === 0 ? " hero" : i === 10 ? " desk" : ""} ${LV[i]}${$("panel").classList.contains("off") ? " off" : ""}`;
+let fitT = 0; addEventListener("resize", () => { clearTimeout(fitT); fitT = setTimeout(() => { if (innerWidth / innerHeight < 0.8 !== tall) return location.reload(); fitAll(); }, 140); });
 const at = (f, p) => { const i = Math.floor(p), t = p - i, s = t * t * (3 - 2 * t), a = f(mod(i, N)), b = f(mod(i + 1, N)); return Array.isArray(a) ? a.map((v, n) => v + (b[n] - v) * s) : a + (b - a) * s; };
 const fine = matchMedia("(pointer: fine)").matches; let p = calm ? 0 : 4, to = 0, v = 0, mx = 0, my = 0, ox = 0, oy = 0, intro = calm ? 1 : 0, shown = -1, idle = 0, falling = false, T = 0;
 function draw(dt) {
-  T += dt; G.time.value = T; const b = Math.floor(p), t = p - b, [ax, ay] = at(AX, p), [, , , yaw, pit] = at((i) => [0, 0, 0, LOOK[i][3], LOOK[i][4]], p); ox += (mx - ox) * Math.min(1, dt * 5); oy += (my - oy) * Math.min(1, dt * 5);
-  const asp = w / ht, fit = at(FIT, p); let tv = fit / D0; if (tall) tv = fit / D0 / asp; else if (asp < 1.6) tv *= 1.6 / asp; const th = tv * asp;
+  T += dt; G.time.value = T; const b = Math.floor(p), t = p - b, [ax, ay, sc] = at((i) => V[i], p), [, , , yaw, pit] = at((i) => [0, 0, 0, LOOK[i][3], LOOK[i][4]], p); ox += (mx - ox) * Math.min(1, dt * 5); oy += (my - oy) * Math.min(1, dt * 5);
+  const asp = w / ht, tv = ht / (2 * D0 * sc), th = tv * asp;
   const Y = yaw + ox * 0.22, X = pit + oy * 0.14; G.axis.value.set(ax * w * q, (1 - ay) * ht * q); G.sun.value.set(-0.45 + ox * 0.75, 0.72 - oy * 0.55, 0.62); rd.setRenderTarget(null); rd.clear();
   if (eye.projectionMatrix.elements[0] !== 1 && mod(Math.round(p), N) === 10) { nd.set(mx, -my); ray.setFromCamera(nd, eye); ray.ray.intersectPlane(lane, G.point); }
   const unit = (ht * q) / (2 * tv);
   for (let L = 0; L < 3; L++) {
     if (L === 2 && t < 0.25) break; const wd = W[mod(b + L, N)], dist = D0 * K ** (L - t), roll = 0.22 * (t - L); wd.setLevel(L); if (L < 2) for (const f of wd.ticks) f(T);
     cam.position.set(Math.sin(Y) * Math.cos(X), Math.sin(X), Math.cos(Y) * Math.cos(X)).multiplyScalar(dist); cam.up.set(0, 1, 0); cam.lookAt(0, 0, 0); cam.rotateZ(roll); const n = Math.max(0.04, dist * 0.05); cam.projectionMatrix.makePerspective(-n * th * 2 * ax, n * th * 2 * (1 - ax), n * tv * 2 * ay, -n * tv * 2 * (1 - ay), n, dist + 60); cam.projectionMatrixInverse.copy(cam.projectionMatrix).invert(); cam.updateMatrixWorld();
-    const s = D0 / dist; G.cell.value = Math.max(0.8, 5.2 * q * s * (ht / 820)); G.ang.value = -roll; G.line.value = Math.min(9, Math.max(0.5, (unit / dist) * 0.034));
+    const s = D0 / dist; G.cell.value = Math.max(0.8, 5.2 * q * s * Math.min(1.3, Math.max(0.64, sc / 98))); G.ang.value = -roll; G.line.value = Math.min(9, Math.max(0.5, (unit / dist) * 0.034));
     const need = (D0 / K) * Math.hypot(Math.max(ax, 1 - ax) * 2 * th, Math.max(ay, 1 - ay) * 2 * tv) * 1.22, g = L === 0 ? Math.min(1, Math.max(0, (t - 0.4) / 0.5)) : 0; wd.hole.scale.setScalar(1 + Math.max(0, need / wd.r - 1) * g * g);
     G.mouse.value.set(((mx + 1) / 2) * w * q, (1 - (my + 1) / 2) * ht * q, L === 0 && fine ? Math.max(0, 1 - Math.abs(p - Math.round(p)) * 5) : 0); if (L === (t > 0.5 ? 1 : 0)) { eye.matrixWorld.copy(cam.matrixWorld); eye.projectionMatrix.copy(cam.projectionMatrix); eye.projectionMatrixInverse.copy(cam.projectionMatrixInverse); eye.position.copy(cam.position); }
     if (L) rd.clearDepth(); rd.render(wd.scene, cam);
@@ -34,12 +48,12 @@ function draw(dt) {
 // words
 const act = (b, f) => { const on = f(); if (typeof on === "boolean") { document.querySelectorAll("#panel .toys button").forEach((x) => x.setAttribute("aria-pressed", "false")); b.setAttribute("aria-pressed", String(on)); } };
 const toybox = () => h("div", { class: "toys", role: "group", "aria-label": "Play with the cat" }, [["Treat", "treat"], ["Yarn", "yarn"], ["Laser", "laser"], ["Coat", "coat"]].map(([t, k]) => h("button", { type: "button", onclick: (e) => act(e.currentTarget, () => { const r = W[10].toys[k](); return typeof r === "boolean" ? r : undefined; }) }, t)));
+function panelNodes(i) { const pr = P[i - 1]; return [...(i === 0 ? [h("h1", {}, "I’m Jash Parmar. I build small, clever products."), h("p", { class: "hook" }, "Software developer in India, open to SDE and FDE roles. Nine projects, each hiding inside the last. Scroll to fall in.")]
+    : i === 10 ? [h("h2", {}, "Say hello"), h("p", { class: "hook" }, CONTACT.email), h("p", { class: "d" }, "I’m happy to talk about work, or about any of these projects."), h("div", { class: "links" }, link("Email me", `mailto:${CONTACT.email}`), ...CONTACT.resumes.map(([t, u]) => link(t === "Software developer" ? "SDE résumé" : "FDE résumé", u, 1)), link("GitHub", CONTACT.github, 1), link("LinkedIn", CONTACT.linkedin, 1)), toybox()]
+    : [h("h2", {}, pr.t), h("p", { class: "hook" }, pr.hook[0].toUpperCase() + pr.hook.slice(1)), h("p", { class: "d" }, pr.d), h("div", { class: "links" }, link(pr.l[0][0], pr.l[0][1]), h("button", { type: "button", class: "two", onclick: () => more(pr) }, "How I built it"))]), hintFor(i)].filter(Boolean); }
 function say(i, again) {
   if (i === shown && !again) return; shown = i; const [pa, ink, tx] = LOOK[i], r = document.documentElement.style; r.setProperty("--paper", pa); r.setProperty("--ink", ink); r.setProperty("--txt", tx); document.querySelector("meta[name=theme-color]").content = pa;
-  const el = $("panel"); el.className = i === 0 ? "hero" : i === 10 ? "desk" : ""; $("home").style.visibility = i ? "" : "hidden"; const pr = P[i - 1];
-  el.replaceChildren(...(i === 0 ? [h("h1", {}, "I’m Jash Parmar. I build small, clever products."), h("p", { class: "hook" }, "Software developer in India, open to SDE and FDE roles. Nine projects, each hiding inside the last. Scroll to fall in.")]
-    : i === 10 ? [h("h2", {}, "Say hello"), h("p", { class: "hook" }, CONTACT.email), h("p", { class: "d" }, "I’m happy to talk about work, or about any of these projects."), h("div", { class: "links" }, link("Email me", `mailto:${CONTACT.email}`), ...CONTACT.resumes.map(([t, u]) => link(t === "Software developer" ? "SDE résumé" : "FDE résumé", u, 1)), link("GitHub", CONTACT.github, 1), link("LinkedIn", CONTACT.linkedin, 1)), toybox()]
-    : [h("h2", {}, pr.t), h("p", { class: "hook" }, pr.hook[0].toUpperCase() + pr.hook.slice(1)), h("p", { class: "d" }, pr.d), h("div", { class: "links" }, link(pr.l[0][0], pr.l[0][1]), h("button", { type: "button", class: "two", onclick: () => more(pr) }, "How I built it"))]), hintFor(i));
+  const el = $("panel"); el.className = panelClass(i); $("home").style.visibility = i ? "" : "hidden"; el.replaceChildren(...panelNodes(i)); const pr = P[i - 1];
   $("zoom").lastChild.textContent = i === 0 ? "the surface" : i === 10 ? "the desk" : `${pr.t}, ${i} of 9`;
 }
 const slug = (i) => (i === 10 ? "hello" : P[i - 1].k === "stepwise" ? "drishi" : P[i - 1].k); let addr = -1; const address = (i) => { if (addr !== i) { addr = i; history.replaceState(null, "", i ? `#${slug(i)}` : location.pathname); } };
@@ -62,7 +76,8 @@ $("list").onclick = () => open(h("h2", { id: "sh" }, "All projects"), h("ol", {}
 function about() { open(h("h2", { id: "sh" }, "About"), h("img", { class: "me", src: PERSON.portrait, alt: "Jash Parmar", width: 288, height: 318 }), h("p", {}, ABOUT), h("ul", { class: "stats" }, STATS.map(([n, l]) => h("li", {}, h("b", {}, n), l))), EXPERIENCE.flatMap((e) => [h("h3", {}, `${e.role}, ${e.org}`), h("p", {}, e.when.replace("·", "to")), h("p", {}, e.what)]), h("h3", {}, "Education"), h("p", {}, EDUCATION), h("div", { class: "links" }, ...CONTACT.resumes.map(([t, u], i) => link(i ? "FDE résumé" : "SDE résumé", u, i)), link("Classic site", "/classic/", 1))); } $("about").onclick = about;
 $("contact").onclick = () => go(10); $("home").onclick = () => go(0);
 // travel
-const stop = () => { if (intro < 1) { intro = 1; to = Math.round(p); } falling = false; $("fall").textContent = "Fall through everything"; };
+const fallLabel = (t) => $("fall").replaceChildren(...(t ? [t] : ["Fall through", h("span", {}, " everything")]));
+const stop = () => { if (intro < 1) { intro = 1; to = Math.round(p); } falling = false; fallLabel(); };
 const step = (d) => { stop(); to = Math.round(Math.abs(to - Math.round(to)) < 0.02 ? to : to + d * 0.3) + d; idle = 9; };
 function go(i) { stop(); let d = mod(i - Math.round(p) + 5, N) - 5; if (Math.abs(d) <= 1) { to = Math.round(p) + d; return; } if (calm) { p = to = i; v = 0; return; } $("c").classList.add("cut"); $("panel").classList.add("off"); setTimeout(() => { p = i - 0.85; to = i; v = 0; $("c").classList.remove("cut"); }, 170); }
 addEventListener("wheel", (e) => { if ($("sheet").open) return; stop(); to += Math.max(-0.3, Math.min(0.3, (e.deltaMode ? e.deltaY * 30 : e.deltaY) * 0.0017)); to = Math.max(p - 1.6, Math.min(p + 1.6, to)); idle = 0; dir = Math.sign(e.deltaY); }, { passive: true }); let dir = 1;
@@ -80,7 +95,7 @@ let hit = null; cv.addEventListener("pointerdown", (e) => { if (e.button) return
 let py = null; $("panel").addEventListener("touchstart", (e) => { py = e.touches[0].clientY; }, { passive: true }); $("panel").addEventListener("touchend", (e) => { const d = py - e.changedTouches[0].clientY; if (Math.abs(d) > 46) step(Math.sign(d)); }, { passive: true });
 addEventListener("keydown", (e) => { if ($("sheet").open || e.metaKey || e.ctrlKey) return; const on = document.activeElement?.matches("button,a"); if (["ArrowDown", "ArrowRight", "PageDown"].includes(e.key) || (e.key === " " && !on)) step(1); else if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) step(-1); else if (e.key === "Home") go(0); else if (e.key === "End") go(10); else return; e.preventDefault(); });
 $("next").onclick = () => step(1); $("prev").onclick = () => step(-1); $("sheet").addEventListener("click", (e) => { if (e.target === $("sheet")) $("sheet").close(); });
-$("fall").onclick = () => { if (falling) { stop(); to = Math.round(p + 0.2); return; } stop(); falling = true; to = p; $("fall").textContent = "Stop here"; };
+$("fall").onclick = () => { if (falling) { stop(); to = Math.round(p + 0.2); return; } stop(); falling = true; to = p; fallLabel("Stop here"); };
 let lastZ = "", slow = 0, seen = 0;
 function frame(now) {
   const dt = Math.min(0.05, (now - (frame.l ?? now)) / 1000); frame.l = now; requestAnimationFrame(frame);
@@ -95,5 +110,5 @@ function frame(now) {
 }
 const hash = [null, ...ORDER, "hello"].indexOf(location.hash.slice(1).replace("drishi", "stepwise")); if (hash > 0) { p = to = hash; intro = 1; }
 // send every world to the graphics chip now, so no journey stutters the first time
-{ const hid = []; W.forEach((x) => { x.setLevel(0); x.scene.traverse((o) => { if (o.isMesh || o.isGroup) { if (!o.visible) { hid.push(o); o.visible = true; } if (o.isMesh && o.frustumCulled) { o.frustumCulled = false; hid.push([o]); } } }); rd.setViewport(0, 0, 4, 4); rd.render(x.scene, cam); }); hid.forEach((o) => (Array.isArray(o) ? (o[0].frustumCulled = true) : (o.visible = false))); rd.clear(); size(); } document.fonts.ready.then(() => requestAnimationFrame(frame));
-window.__s = () => ({ p, to, q, calls: rd.info.render.calls, stamp, got, cats, best, score, pick, W, set: (x) => { p = to = x; v = 0; intro = 1; }, step, go });
+{ const hid = []; W.forEach((x) => { x.setLevel(0); x.scene.traverse((o) => { if (o.isMesh || o.isGroup) { if (!o.visible) { hid.push(o); o.visible = true; } if (o.isMesh && o.frustumCulled) { o.frustumCulled = false; hid.push([o]); } } }); rd.setViewport(0, 0, 4, 4); rd.render(x.scene, cam); }); hid.forEach((o) => (Array.isArray(o) ? (o[0].frustumCulled = true) : (o.visible = false))); rd.clear(); size(); } fallLabel(); fitAll(); document.fonts.ready.then(() => { fitAll(); booted = true; requestAnimationFrame(frame); });
+window.__s = () => ({ p, to, q, calls: rd.info.render.calls, stamp, got, cats, best, score, pick, W, V, LV, set: (x) => { p = to = x; v = 0; intro = 1; }, step, go });

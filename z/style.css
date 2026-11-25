@@ -8,8 +8,8 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
 .try { display: flex; align-items: center; gap: 12px; margin-top: 20px; font-weight: 700; font-size: 17px; line-height: 1.3; } .try > i { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-style: normal; box-shadow: inset 0 0 0 2.5px var(--txt); } .try > span { display: block; } .score { display: block; font-style: normal; font-weight: 600; opacity: 0.95; min-height: 1.3em; white-space: pre-wrap; } .score:empty { display: none; } .try .score .dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; box-shadow: 0 0 0 2.5px var(--ink); margin: 0 9px 0 3px; vertical-align: -3px; }
 .toys { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; pointer-events: auto; } .toys button { min-height: 44px; padding: 0 18px; border-radius: 12px; font-weight: 700; background: #fff3e2; color: #3a0f2c; box-shadow: 0 0 0 3px #3a0f2c, 0 4px 0 3px #3a0f2c; transition: transform 0.1s; } .toys button:active, .toys button[aria-pressed="true"] { transform: translateY(4px); box-shadow: 0 0 0 3px #3a0f2c; background: #ffd52e; }
 .try.done > i { background: var(--txt); color: var(--paper); }
-#panel.hero .try { margin-top: 12px; }
-dialog .cards { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 22px; } dialog .cards button { display: block; height: 100%; min-height: 108px; padding: 16px 18px; background: #f1ece0; color: #1a1030; } dialog .cards button.got { background: var(--k); color: var(--i); transform: rotate(-1.2deg); box-shadow: 0 0 0 3px #1a1030; } dialog .cards b { margin-bottom: 4px; }
+.panel.hero .try { margin-top: 12px; }
+dialog .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 22px; } dialog .cards button { overflow-wrap: anywhere; display: block; height: 100%; min-height: 108px; padding: 16px 18px; background: #f1ece0; color: #1a1030; } dialog .cards button.got { background: var(--k); color: var(--i); transform: rotate(-1.2deg); box-shadow: 0 0 0 3px #1a1030; } dialog .cards b { margin-bottom: 4px; }
 #c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; transition: opacity 0.16s; }
 #c.cut { opacity: 0; }
 header { position: fixed; inset: 0 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 26px 40px; font-weight: 700; z-index: 3; pointer-events: none; }
@@ -18,15 +18,15 @@ header nav { display: flex; gap: 8px; }
 header nav button, #fall { padding: 0 18px; min-height: 44px; border-radius: 99px; background: var(--txt); color: var(--paper); box-shadow: 0 0 0 3px var(--paper); transition: transform 0.15s; }
 header nav button:hover, #fall:hover, .links a:hover, .links button:hover { transform: translateY(-2px); }
 #home { background: var(--paper); box-shadow: 0 0 0 3px var(--ink); border-radius: 99px; padding: 0 20px; font-family: var(--disp); font-weight: 400; font-size: 20px; }
-#panel { position: fixed; left: 40px; top: 50%; width: min(35vw, 520px); transform: translateY(-50%); z-index: 2; pointer-events: none; transition: opacity 0.14s; }
-#panel.off { opacity: 0; }
-#panel.off * { pointer-events: none !important; }
-#panel.hero { top: auto; bottom: 100px; transform: none; width: min(76vw, 1080px); }
-#panel h1, #panel h2 { font: 400 clamp(38px, 4.7vw, 84px)/0.98 var(--disp); text-wrap: balance; }
-#panel.hero h1 { font-size: clamp(24px, 2.4vw, 46px); line-height: 1.06; white-space: nowrap; }
-#panel.hero .hook { margin-top: 10px; }
-#panel .hook { font-weight: 700; font-size: clamp(18px, 1.45vw, 24px); margin-top: 16px; line-height: 1.3; }
-#panel .d { margin-top: 14px; font-size: clamp(16px, 1.16vw, 19px); max-width: 46ch; }
+.panel { position: fixed; left: max(40px, calc(env(safe-area-inset-left) + 16px)); top: calc(var(--pt, 84px) + (100% - var(--pt, 84px) - var(--pb, 100px)) / 2); width: min(35vw, 520px); transform: translateY(-50%); z-index: 2; pointer-events: none; transition: opacity 0.14s; }
+.panel.off { opacity: 0; }
+.panel.off * { pointer-events: none !important; }
+.panel.hero { top: auto; bottom: var(--pb, 100px); transform: none; width: min(76vw, 1080px); }
+.panel h1, .panel h2 { font: 400 clamp(38px, 4.7vw, 84px)/0.98 var(--disp); text-wrap: balance; }
+.panel.hero h1 { font-size: clamp(24px, 2.4vw, 46px); line-height: 1.06; white-space: nowrap; }
+.panel.hero .hook { margin-top: 10px; }
+.panel .hook { font-weight: 700; font-size: clamp(18px, 1.45vw, 24px); margin-top: 16px; line-height: 1.3; }
+.panel .d { margin-top: 14px; font-size: clamp(16px, 1.16vw, 19px); max-width: 46ch; }
 .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; pointer-events: auto; }
 .links a, .links button { display: inline-flex; align-items: center; min-height: 50px; padding: 0 24px; border-radius: 99px; background: var(--txt); color: var(--paper); text-decoration: none; font-weight: 700; transition: transform 0.15s; }
 .links .two { background: var(--paper); color: var(--txt); box-shadow: inset 0 0 0 2.5px var(--txt); }
@@ -51,7 +51,7 @@ dialog img { width: 100%; height: auto; display: block; border-radius: 14px; mar
 dialog .me { width: 150px; border-radius: 14px; float: right; margin: 0 0 16px 20px; }
 .stats { list-style: none; padding: 0; margin: 22px 0 0; display: flex; gap: 26px; flex-wrap: wrap; clear: both; } .stats b { display: block; font: 400 34px/1.1 var(--disp); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.plain body { overflow: auto; } .plain .sr { position: static; width: auto; height: auto; clip-path: none; white-space: normal; max-width: 760px; margin: 0 auto; padding: 40px 24px; } .plain #c, .plain footer, .plain header, .plain #panel { display: none; }
+.plain body { overflow: auto; } .plain .sr { position: static; width: auto; height: auto; clip-path: none; white-space: normal; max-width: 760px; margin: 0 auto; padding: 40px 24px; } .plain #c, .plain footer, .plain header, .plain .panel { display: none; }
 dialog .x { position: fixed; top: 22px; right: 24px; width: 48px; height: 48px; border-radius: 50%; background: #1a1030; color: #fffdf6; font-size: 26px; line-height: 1; }
 dialog .links a { background: #1a1030; color: #fffdf6; } dialog .links .two { background: var(--paper); color: #1a1030; box-shadow: inset 0 0 0 2.5px #1a1030; }
 dialog ol { list-style: none; padding: 0; display: grid; gap: 4px; }
@@ -59,15 +59,25 @@ dialog ol button { width: 100%; display: grid; grid-template-columns: 124px 1fr;
 dialog ol button:hover { background: color-mix(in srgb, var(--k) 22%, #fffdf6); }
 dialog ol img { margin: 0; width: 124px; height: 70px; object-fit: cover; object-position: top left; border-radius: 8px; box-shadow: 0 0 0 2.5px #1a1030; }
 dialog ol b { font: 400 21px/1.15 var(--disp); display: block; } dialog ol span { font-size: 16px; }
-@media (max-width: 760px), (max-aspect-ratio: 4/5) {
-  body { font-size: 17px; }
-  header { padding: 14px 16px; } header nav { gap: 6px; } header nav button { padding: 0 13px; font-size: 15px; } #about { display: none; } #home { display: none; } header { justify-content: center; } #home { font-size: 15px; padding: 0 13px; }
-  #panel, #panel.hero { left: 0; right: 0; width: auto; top: auto; bottom: 0; transform: none; padding: 20px 20px calc(84px + env(safe-area-inset-bottom)); background: var(--paper); border-top: 4px solid var(--ink); }
-  #panel.desk .d { display: none; } #panel.desk .links { gap: 7px; } #panel.desk .links a { min-height: 44px; padding: 0 14px; font-size: 15px; } .toys { gap: 10px; margin-top: 14px; flex-wrap: nowrap; } .toys button { flex: 1; padding: 0 6px; font-size: 15px; } #panel h2 { font-size: 34px; } #toast { bottom: auto; top: 78px; width: max-content; max-width: 92vw; padding: 10px 18px; transform: translate(-50%, -20px); } .try { margin-top: 14px; font-size: 16px; gap: 10px; } .try > i { width: 28px; height: 28px; } #panel.hero h1 { font-size: 27px; white-space: normal; } #panel .hook { margin-top: 8px; } #panel .d { margin-top: 6px; font-size: 16px; line-height: 1.42; } .links { margin-top: 14px; gap: 8px; } .links a, .links button { min-height: 46px; padding: 0 17px; font-size: 16px; }
-  footer { left: 16px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); justify-content: space-between; gap: 6px; } #zoom { min-width: 0; flex: 1; } #zoom span { display: none; } #zoom b { font-size: 15px; } #fall { font-size: 15px; padding: 0 14px; margin: 0; }
-  dialog { padding: 80px 20px 40px; } dialog ol button { grid-template-columns: 92px 1fr; gap: 12px; } dialog ol img { width: 92px; height: 56px; }
-}
-@media (max-height: 640px) and (min-width: 761px) and (min-aspect-ratio: 4/5) { #panel .d { display: none; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
-@media (max-width: 760px) and (max-height: 700px) { #panel .d { display: none; } }
 .doors { display: grid; gap: 12px; } .doors a { display: block; padding: 18px 20px; border-radius: 16px; background: var(--k); color: var(--i); text-decoration: none; box-shadow: 0 0 0 3px #1a1030; transition: transform 0.15s; } .doors a:hover { transform: rotate(-0.8deg) translateY(-2px); } .doors b { display: block; font: 400 24px/1.15 var(--disp); } .doors span { font-weight: 600; }
+/* fewer words when there is less room (levels are chosen by measuring) */
+.panel.l1 .d { display: none; }
+.panel.l2 h2, .panel.l2 h1 { font-size: 30px !important; white-space: normal !important; } .panel.l2 .links { margin-top: 10px; gap: 8px; } .panel.l2 .links a, .panel.l2 .links button { min-height: 44px; padding: 0 14px; font-size: 15px; } .panel.l2 .try { margin-top: 10px; font-size: 15px; line-height: 1.25; } .panel.l2 .toys { margin-top: 10px; } .panel.l2 .hook { margin-top: 5px; font-size: 16px; }
+.panel.l3:not(.desk, .hero) .hook { display: none; } .panel.l3 h2, .panel.l3 h1 { font-size: 24px !important; } .panel.l3 .links { margin-top: 8px; } .panel.l3.hero .hook { font-size: 15px; } .panel.l3 .try { margin-top: 8px; }
+.panel.l4 .try { font-size: 14px; } .panel.l4 .links a, .panel.l4 .links button { padding: 0 9px !important; font-size: 13.5px !important; gap: 6px; } .panel.l4 .links { gap: 6px !important; } .panel.l4.hero .try, .panel.l4.desk .try { display: none; }
+/* portrait: art above, words below */
+.stack body { font-size: 17px; }
+.stack header { padding: calc(12px + env(safe-area-inset-top)) 10px 0; justify-content: center; } .stack header nav { gap: 8px; } .stack header nav button { padding: 0 14px; font-size: 15px; } .stack #home, .stack #about { display: none; }
+.stack .panel, .stack .panel.hero { left: 0; right: 0; width: auto; top: auto; bottom: 0; transform: none; padding: 18px 20px calc(86px + env(safe-area-inset-bottom)); background: var(--paper); border-top: 4px solid var(--ink); }
+.stack .panel h2 { font-size: 34px; } .stack .panel.hero h1 { font-size: 27px; white-space: normal; } .stack .panel .hook { margin-top: 7px; font-size: 18px; } .stack .panel .d { margin-top: 6px; font-size: 16px; line-height: 1.42; max-width: 60ch; }
+.stack .links { margin-top: 14px; gap: 8px; } .stack .links a, .stack .links button { min-height: 46px; padding: 0 17px; font-size: 16px; } .stack .try { margin-top: 13px; font-size: 16px; gap: 10px; } .stack .try > i { width: 28px; height: 28px; } .stack .toys { gap: 10px; margin-top: 14px; flex-wrap: nowrap; } .stack .toys button { flex: 1; padding: 0 4px; font-size: 15px; } .stack .desk .links a { min-height: 44px; padding: 0 14px; font-size: 15px; }
+.stack footer { left: 14px; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom)); justify-content: space-between; gap: 6px; } .stack #zoom { min-width: 58px; flex: 1; } .stack #zoom span, .stack #fall span { display: none; } .stack #zoom b { font-size: 16px; white-space: nowrap; } .stack #fall { font-size: 15px; padding: 0 16px; margin: 0; }
+.stack #toast { bottom: auto; top: calc(70px + env(safe-area-inset-top)); width: max-content; max-width: 92vw; padding: 10px 18px; transform: translate(-50%, -20px); } .stack #toast.on { transform: translate(-50%, 0); }
+.stack dialog { padding: 80px 20px calc(40px + env(safe-area-inset-bottom)); } .stack dialog ol button { grid-template-columns: 92px 1fr; gap: 12px; } .stack dialog ol img { width: 92px; height: 56px; } .stack dialog .cards button { padding: 14px; } .stack dialog .cards b { font-size: 18px; } .stack dialog .me { width: 112px; }
+@media (min-width: 700px) { .stack body { font-size: 19px; } .stack .panel, .stack .panel.hero { padding-left: 36px; padding-right: 36px; } .stack .panel h2 { font-size: 48px; } .stack .panel.hero h1 { font-size: 40px; } .stack .panel .hook { font-size: 22px; } .stack .panel .d { font-size: 18px; } .stack footer { left: 36px; right: auto; gap: 14px; } .stack #zoom { min-width: 110px; } .stack #zoom span, .stack #fall span { display: inline; } .stack .toys button { flex: none; padding: 0 22px; } }
+/* landscape phones: everything small, side by side */
+.short body { font-size: 15px; } .short #home, .short #about { display: none; } .short header { padding: 8px max(12px, env(safe-area-inset-right)) 0 12px; justify-content: flex-end; } .short header nav button { padding: 0 14px; font-size: 15px; min-height: 44px; }
+.short .panel { left: max(16px, calc(env(safe-area-inset-left) + 8px)); width: 43vw; } .short .panel.hero { width: 43vw; bottom: auto; top: calc(var(--pt) + (100% - var(--pt) - var(--pb)) / 2); transform: translateY(-50%); } .short .panel h2 { font-size: 30px; } .short .panel.hero h1 { font-size: 24px; white-space: normal; } .short .panel .hook { margin-top: 4px; font-size: 16px; } .short .panel .d { margin-top: 5px; font-size: 14.5px; line-height: 1.35; } .short .links { margin-top: 9px; gap: 7px; } .short .links a, .short .links button { min-height: 44px; padding: 0 14px; font-size: 15px; } .short .try { margin-top: 9px; font-size: 14.5px; gap: 9px; line-height: 1.25; } .short .try > i { width: 26px; height: 26px; } .short .toys { margin-top: 10px; flex-wrap: nowrap; } .short .toys button { padding: 0 12px; font-size: 14.5px; }
+.short footer { left: max(16px, calc(env(safe-area-inset-left) + 8px)); bottom: calc(10px + env(safe-area-inset-bottom) / 2); gap: 6px; padding: 4px; } .short #prev, .short #next { width: 42px; height: 42px; } .short #zoom { min-width: 60px; } .short #zoom span, .short #fall span { display: none; } .short #zoom b { font-size: 15px; } .short #fall { min-height: 42px; font-size: 15px; padding: 0 14px; } .short #toast { bottom: auto; top: 8px; padding: 8px 18px; } .short .desk .links a { padding: 0 11px; font-size: 14px; }
+.short dialog { padding: 64px 28px 28px; width: min(640px, 88vw); } .short dialog img:not(.me, ol img) { max-height: 60vh; object-fit: cover; object-position: top; } .short dialog .x { top: 10px; }
