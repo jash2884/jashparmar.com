@@ -1,0 +1,61 @@
+:root { --paper: #2b3cff; --ink: #0b0a3d; --txt: #fff6df; --disp: "Bowlby One", Impact, sans-serif; }
+* { box-sizing: border-box; margin: 0; }
+html, body { height: 100%; overflow: hidden; overscroll-behavior: none; background: var(--paper); color: var(--txt); font: 500 18px/1.5 Figtree, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+button, a { font: inherit; color: inherit; }
+button { background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 3px solid currentColor; outline-offset: 4px; border-radius: 6px; }
+#c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: zoom-in; transition: opacity 0.16s; }
+#c.cut { opacity: 0; }
+header { position: fixed; inset: 0 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 26px 40px; font-weight: 700; z-index: 3; pointer-events: none; }
+header button { pointer-events: auto; min-height: 44px; }
+header nav { display: flex; gap: 8px; }
+header nav button, #fall { padding: 0 18px; min-height: 44px; border-radius: 99px; background: var(--txt); color: var(--paper); box-shadow: 0 0 0 3px var(--paper); transition: transform 0.15s; }
+header nav button:hover, #fall:hover, .links a:hover, .links button:hover { transform: translateY(-2px); }
+#home { background: var(--paper); box-shadow: 0 0 0 3px var(--ink); border-radius: 99px; padding: 0 20px; font-family: var(--disp); font-weight: 400; font-size: 20px; }
+#panel { position: fixed; left: 40px; top: 50%; width: min(35vw, 520px); transform: translateY(-50%); z-index: 2; pointer-events: none; transition: opacity 0.14s; }
+#panel.off { opacity: 0; }
+#panel.off * { pointer-events: none !important; }
+#panel.hero { top: auto; bottom: 104px; transform: none; width: min(64vw, 900px); }
+#panel h1, #panel h2 { font: 400 clamp(38px, 4.7vw, 84px)/0.98 var(--disp); text-wrap: balance; }
+#panel.hero h1 { font-size: clamp(24px, 2.4vw, 46px); line-height: 1.06; white-space: nowrap; }
+#panel.hero .hook { margin-top: 10px; }
+#panel .hook { font-weight: 700; font-size: clamp(18px, 1.45vw, 24px); margin-top: 16px; line-height: 1.3; }
+#panel .d { margin-top: 14px; font-size: clamp(16px, 1.16vw, 19px); max-width: 46ch; }
+.links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; pointer-events: auto; }
+.links a, .links button { display: inline-flex; align-items: center; min-height: 50px; padding: 0 24px; border-radius: 99px; background: var(--txt); color: var(--paper); text-decoration: none; font-weight: 700; transition: transform 0.15s; }
+.links .two { background: var(--paper); color: var(--txt); box-shadow: inset 0 0 0 2.5px var(--txt); }
+footer { position: fixed; left: 40px; bottom: 30px; display: flex; align-items: center; gap: 12px; z-index: 3; font-weight: 700; }
+footer svg { width: 24px; fill: none; stroke: currentColor; stroke-width: 3.4; stroke-linecap: round; }
+footer { background: var(--paper); border-radius: 99px; padding: 5px; box-shadow: 0 0 0 3px var(--ink); }
+#prev, #next { flex: none; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; box-shadow: inset 0 0 0 2.5px var(--txt); }
+#prev:hover, #next:hover { background: var(--txt); color: var(--paper); }
+#zoom { min-width: 150px; text-align: center; font-variant-numeric: tabular-nums; line-height: 1.1; }
+#zoom b, #zoom span { display: block; } #zoom b { font: 400 18px/1.2 var(--disp); } #zoom span { font-size: 14px; }
+#zoom sup { font-size: 0.72em; line-height: 0; vertical-align: 0.5em; }
+#fall { margin-left: 4px; white-space: nowrap; }
+dialog { border: 0; margin: auto 0 auto auto; width: min(640px, 100vw); height: 100dvh; max-height: none; max-width: none; background: var(--txt); color: var(--paper); padding: 84px 48px 56px; overflow-y: auto; overscroll-behavior: contain; }
+dialog.light { background: #fffdf6; color: #1a1030; }
+dialog::backdrop { background: rgb(10 5 30 / 0.35); }
+dialog[open] { animation: in 0.28s cubic-bezier(0.2, 0.9, 0.2, 1); }
+@keyframes in { from { transform: translateX(60px); opacity: 0; } }
+dialog h2 { font: 400 clamp(34px, 5vw, 52px)/1 var(--disp); margin-bottom: 20px; }
+dialog h3 { font-size: 20px; font-weight: 800; margin: 26px 0 4px; }
+dialog p + p { margin-top: 12px; }
+dialog img { width: 100%; height: auto; display: block; border-radius: 14px; margin-bottom: 28px; box-shadow: 0 0 0 3px currentColor; }
+dialog .x { position: fixed; top: 22px; right: 24px; width: 48px; height: 48px; border-radius: 50%; background: #1a1030; color: #fffdf6; font-size: 26px; line-height: 1; }
+dialog .links a { background: #1a1030; color: #fffdf6; } dialog .links .two { background: var(--paper); color: #1a1030; box-shadow: inset 0 0 0 2.5px #1a1030; }
+dialog ol { list-style: none; padding: 0; display: grid; gap: 4px; }
+dialog ol button { width: 100%; display: grid; grid-template-columns: 124px 1fr; gap: 18px; align-items: center; text-align: left; padding: 8px; border-radius: 14px; transition: background 0.15s; }
+dialog ol button:hover { background: color-mix(in srgb, var(--k) 22%, #fffdf6); }
+dialog ol img { margin: 0; width: 124px; height: 70px; object-fit: cover; object-position: top left; border-radius: 8px; box-shadow: 0 0 0 2.5px #1a1030; }
+dialog ol b { font: 400 21px/1.15 var(--disp); display: block; } dialog ol span { font-size: 16px; }
+@media (max-width: 760px) {
+  body { font-size: 17px; }
+  header { padding: 14px 16px; } header nav { gap: 6px; } header nav button { padding: 0 13px; font-size: 15px; } #about { display: none; } #home { font-size: 15px; padding: 0 13px; }
+  #panel, #panel.hero { left: 0; right: 0; width: auto; top: auto; bottom: 0; transform: none; padding: 20px 20px calc(84px + env(safe-area-inset-bottom)); background: var(--paper); border-top: 4px solid var(--ink); }
+  #panel h2 { font-size: 34px; } #panel.hero h1 { font-size: 27px; white-space: normal; } #panel .hook { margin-top: 8px; } #panel .d { margin-top: 6px; font-size: 16px; line-height: 1.42; } .links { margin-top: 14px; gap: 8px; } .links a, .links button { min-height: 46px; padding: 0 17px; font-size: 16px; }
+  footer { left: 16px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); justify-content: space-between; gap: 6px; } #zoom { min-width: 0; flex: 1; } #zoom span { display: none; } #fall { font-size: 15px; padding: 0 14px; margin: 0; }
+  dialog { padding: 80px 20px 40px; } dialog ol button { grid-template-columns: 92px 1fr; gap: 12px; } dialog ol img { width: 92px; height: 56px; }
+}
+@media (max-height: 640px) and (min-width: 761px) { #panel .d { display: none; } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
