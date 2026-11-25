@@ -24,7 +24,7 @@ function draw(dt) {
     if (L === 2 && t < 0.25) break; const wd = W[mod(b + L, N)], dist = D0 * K ** (L - t), roll = 0.22 * (t - L); wd.setLevel(L); if (L < 2) for (const f of wd.ticks) f(T);
     cam.position.set(Math.sin(Y) * Math.cos(X), Math.sin(X), Math.cos(Y) * Math.cos(X)).multiplyScalar(dist); cam.up.set(0, 1, 0); cam.lookAt(0, 0, 0); cam.rotateZ(roll); const n = Math.max(0.04, dist * 0.05); cam.projectionMatrix.makePerspective(-n * th * 2 * ax, n * th * 2 * (1 - ax), n * tv * 2 * ay, -n * tv * 2 * (1 - ay), n, dist + 60); cam.projectionMatrixInverse.copy(cam.projectionMatrix).invert(); cam.updateMatrixWorld();
     const s = D0 / dist; G.cell.value = Math.max(0.8, 5.2 * q * s * (ht / 820)); G.ang.value = -roll; G.line.value = Math.min(9, Math.max(0.5, (unit / dist) * 0.034));
-    const need = (D0 / K) * Math.hypot(Math.max(ax, 1 - ax) * 2 * th, Math.max(ay, 1 - ay) * 2 * tv) * 1.22, g = L === 0 ? Math.max(0, (t - 0.45) / 0.55) : 0; wd.hole.scale.setScalar(1 + Math.max(0, need / wd.r - 1) * g * g);
+    const need = (D0 / K) * Math.hypot(Math.max(ax, 1 - ax) * 2 * th, Math.max(ay, 1 - ay) * 2 * tv) * 1.22, g = L === 0 ? Math.min(1, Math.max(0, (t - 0.4) / 0.5)) : 0; wd.hole.scale.setScalar(1 + Math.max(0, need / wd.r - 1) * g * g);
     G.mouse.value.set(((mx + 1) / 2) * w * q, (1 - (my + 1) / 2) * ht * q, L === 0 && fine ? Math.max(0, 1 - Math.abs(p - Math.round(p)) * 5) : 0); if (L === (t > 0.5 ? 1 : 0)) { eye.matrixWorld.copy(cam.matrixWorld); eye.projectionMatrix.copy(cam.projectionMatrix); eye.projectionMatrixInverse.copy(cam.projectionMatrixInverse); eye.position.copy(cam.position); }
     if (L) rd.clearDepth(); rd.render(wd.scene, cam);
   }
