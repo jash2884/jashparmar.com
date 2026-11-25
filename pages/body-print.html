@@ -1,0 +1,11 @@
+<main id="bed"><canvas id="c" aria-label="Your print"></canvas></main>
+<section class="box" id="ctl" style="right:32px;top:100px;width:370px">
+<h1>Print shop</h1><p>Drop in a photo and it becomes a comic print. It never leaves your device.</p>
+<div class="row"><button class="b go" id="pick">Choose a photo</button><button class="b" id="cat">Use a cat</button><input id="file" type="file" accept="image/*" hidden /></div>
+<div class="row" id="inks" role="group" aria-label="Inks" style="margin:18px 0 12px"></div>
+<div class="row" id="style" role="group" aria-label="Style"><button class="b" data-s="0" aria-pressed="true">Dots</button><button class="b" data-s="1">Lines</button><button class="b" data-s="2">Cross</button></div>
+<label style="margin-top:14px">Dot size<input id="dot" type="range" min="4" max="26" value="10" /></label>
+<label>Contrast<input id="con" type="range" min="0" max="100" value="24" /></label>
+<label for="cap">Caption</label><input id="cap" type="text" maxlength="22" autocomplete="off" placeholder="Optional" />
+<div class="row" style="margin-top:16px"><button class="b go" id="save">Download print</button></div>
+</section>

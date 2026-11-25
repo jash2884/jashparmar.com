@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Your name in print | Jash Parmar</title>
+<meta name="description" content="Type your name and get it as big 3D comic letters." /><meta name="robots" content="index, follow" /><link rel="canonical" href="https://jashparmar.com/name" />
+<meta property="og:type" content="website" /><meta property="og:title" content="Your name in print" /><meta property="og:description" content="Type your name and get it as big 3D comic letters." /><meta property="og:url" content="https://jashparmar.com/name" /><meta property="og:image" content="https://jashparmar.com/z/og-name.jpg?v=1" /><meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:image" content="https://jashparmar.com/z/og-name.jpg?v=1" />
+<meta name="theme-color" content="#12c26b" /><link rel="icon" href="z/icon.svg?v=1" type="image/svg+xml" /><link rel="apple-touch-icon" href="z/icon-180.png?v=1" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Figtree:wght@400..800&display=swap" rel="stylesheet" />
+<script type="importmap">{"imports":{"three":"./z/vendor/three.module.min.js","three/addons/":"./z/vendor/addons/"}}</script>
+<link rel="stylesheet" href="z/pages.css?v=1" />
+</head><body style="--paper:#12c26b" class="full">
+<header><a href="./">Jash Parmar</a><nav aria-label="Explore"><a href="./">Home</a><a href="cats">Cats</a><a href="print">Print</a><a href="name" aria-current="page">Name</a></nav></header>
+<canvas id="c" aria-label="Your name in 3D letters"></canvas>
+<section class="box" style="left:32px;bottom:32px;width:390px">
+<h1>Your name in print</h1><label for="nm">Type a name</label><input id="nm" type="text" maxlength="14" autocomplete="off" spellcheck="false" />
+<div class="row" id="inks" role="group" aria-label="Colours" style="margin-top:16px"></div>
+<div class="row" style="margin-top:16px"><button class="b go" id="pic">Download</button><button class="b" id="share">Copy link</button><button class="b" id="shake">Shake it</button></div>
+</section>
+<p class="plain">This page needs 3D, and this browser has it turned off.</p>
+
+<p id="say" role="status"></p>
+<script type="module" src="z/name.js?v=1"></script>
+</body></html>
