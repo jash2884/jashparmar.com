@@ -4,7 +4,11 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; backgrou
 button, a { font: inherit; color: inherit; }
 button { background: none; border: 0; padding: 0; cursor: pointer; }
 :focus-visible { outline: 3px solid currentColor; outline-offset: 4px; border-radius: 6px; }
-#c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: zoom-in; transition: opacity 0.16s; }
+#toast { position: fixed; left: 50%; bottom: 112px; transform: translate(-50%, 30px); background: #fffdf6; color: #1a1030; box-shadow: 0 0 0 3px #1a1030; border-radius: 99px; padding: 12px 24px; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.25s; z-index: 5; text-align: center; } #toast.on { opacity: 1; transform: translate(-50%, 0); }
+.try { display: flex; align-items: center; gap: 12px; margin-top: 20px; font-weight: 700; font-size: 17px; line-height: 1.3; } .try i { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-style: normal; box-shadow: inset 0 0 0 2.5px var(--txt); } .try.done i { background: var(--txt); color: var(--paper); }
+#panel.hero .try { margin-top: 12px; }
+dialog .cards { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 22px; } dialog .cards button { display: block; height: 100%; min-height: 108px; padding: 16px 18px; background: #f1ece0; color: #1a1030; } dialog .cards button.got { background: var(--k); color: var(--i); transform: rotate(-1.2deg); box-shadow: 0 0 0 3px #1a1030; } dialog .cards b { margin-bottom: 4px; }
+#c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; transition: opacity 0.16s; }
 #c.cut { opacity: 0; }
 header { position: fixed; inset: 0 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 26px 40px; font-weight: 700; z-index: 3; pointer-events: none; }
 header button { pointer-events: auto; min-height: 44px; }
@@ -15,7 +19,7 @@ header nav button:hover, #fall:hover, .links a:hover, .links button:hover { tran
 #panel { position: fixed; left: 40px; top: 50%; width: min(35vw, 520px); transform: translateY(-50%); z-index: 2; pointer-events: none; transition: opacity 0.14s; }
 #panel.off { opacity: 0; }
 #panel.off * { pointer-events: none !important; }
-#panel.hero { top: auto; bottom: 104px; transform: none; width: min(76vw, 1080px); }
+#panel.hero { top: auto; bottom: 100px; transform: none; width: min(76vw, 1080px); }
 #panel h1, #panel h2 { font: 400 clamp(38px, 4.7vw, 84px)/0.98 var(--disp); text-wrap: balance; }
 #panel.hero h1 { font-size: clamp(24px, 2.4vw, 46px); line-height: 1.06; white-space: nowrap; }
 #panel.hero .hook { margin-top: 10px; }
@@ -53,13 +57,13 @@ dialog ol button { width: 100%; display: grid; grid-template-columns: 124px 1fr;
 dialog ol button:hover { background: color-mix(in srgb, var(--k) 22%, #fffdf6); }
 dialog ol img { margin: 0; width: 124px; height: 70px; object-fit: cover; object-position: top left; border-radius: 8px; box-shadow: 0 0 0 2.5px #1a1030; }
 dialog ol b { font: 400 21px/1.15 var(--disp); display: block; } dialog ol span { font-size: 16px; }
-@media (max-width: 760px) {
+@media (max-width: 760px), (max-aspect-ratio: 4/5) {
   body { font-size: 17px; }
-  header { padding: 14px 16px; } header nav { gap: 6px; } header nav button { padding: 0 13px; font-size: 15px; } #about { display: none; } #home { font-size: 15px; padding: 0 13px; }
+  header { padding: 14px 16px; } header nav { gap: 6px; } header nav button { padding: 0 13px; font-size: 15px; } #about { display: none; } #home { display: none; } header { justify-content: center; } #home { font-size: 15px; padding: 0 13px; }
   #panel, #panel.hero { left: 0; right: 0; width: auto; top: auto; bottom: 0; transform: none; padding: 20px 20px calc(84px + env(safe-area-inset-bottom)); background: var(--paper); border-top: 4px solid var(--ink); }
-  #panel h2 { font-size: 34px; } #panel.hero h1 { font-size: 27px; white-space: normal; } #panel .hook { margin-top: 8px; } #panel .d { margin-top: 6px; font-size: 16px; line-height: 1.42; } .links { margin-top: 14px; gap: 8px; } .links a, .links button { min-height: 46px; padding: 0 17px; font-size: 16px; }
+  #panel h2 { font-size: 34px; } #toast { bottom: auto; top: 78px; width: max-content; max-width: 92vw; padding: 10px 18px; transform: translate(-50%, -20px); } .try { margin-top: 14px; font-size: 16px; gap: 10px; } .try i { width: 28px; height: 28px; } #panel.hero h1 { font-size: 27px; white-space: normal; } #panel .hook { margin-top: 8px; } #panel .d { margin-top: 6px; font-size: 16px; line-height: 1.42; } .links { margin-top: 14px; gap: 8px; } .links a, .links button { min-height: 46px; padding: 0 17px; font-size: 16px; }
   footer { left: 16px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); justify-content: space-between; gap: 6px; } #zoom { min-width: 0; flex: 1; } #zoom span { display: none; } #fall { font-size: 15px; padding: 0 14px; margin: 0; }
   dialog { padding: 80px 20px 40px; } dialog ol button { grid-template-columns: 92px 1fr; gap: 12px; } dialog ol img { width: 92px; height: 56px; }
 }
-@media (max-height: 640px) and (min-width: 761px) { #panel .d { display: none; } }
+@media (max-height: 640px) and (min-width: 761px) and (min-aspect-ratio: 4/5) { #panel .d { display: none; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }

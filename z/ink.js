@@ -2,7 +2,7 @@
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 THREE.ColorManagement.enabled = false;
-export const G = { axis: { value: new THREE.Vector2() }, cell: { value: 6 }, ang: { value: 0 }, res: { value: new THREE.Vector2(1, 1) }, line: { value: 3 }, time: { value: 0 } };
+export const G = { axis: { value: new THREE.Vector2() }, cell: { value: 6 }, ang: { value: 0 }, res: { value: new THREE.Vector2(1, 1) }, line: { value: 3 }, time: { value: 0 }, sun: { value: new THREE.Vector3(-0.5, 0.72, 0.62) }, mouse: { value: new THREE.Vector3(-9999, 0, 0) } };
 const C = (c) => new THREE.Color(c), lerp = (a, b, t) => C(a).lerp(C(b), t);
 export const DOTS = `uniform vec2 axis; uniform float cell, ang;
 float dots(float dark){ vec2 p=gl_FragCoord.xy-axis; float s=sin(ang+.5),c=cos(ang+.5); p=mat2(c,-s,s,c)*p/cell; float d=length(fract(p)-.5), r=sqrt(clamp(dark,0.,1.))*.73, aa=.8/cell;
@@ -20,8 +20,8 @@ void main(){ vec4 p=vec4(position,1.); vec3 n=normal, o=sn; vC=vec3(1.);
  vec3 q=normalize(normalMatrix*o); vec2 e=(projectionMatrix*vec4(q,0.)).xy; float l=length(e); if(l>.0001) gl_Position.xy+=e/l*line*2./res*gl_Position.w*min(1.,length(q.xy)*3.);
 #endif
 }`;
-const FRAG = `uniform vec3 a,b,h; uniform float hl, bias; varying vec3 vN, vC; ${DOTS}
-void main(){ vec3 n=normalize(vN); float l=dot(n,normalize(vec3(-.5,.72,.62))); float dark=smoothstep(.62,-.4,l+bias);
+const FRAG = `uniform vec3 a,b,h,sun; uniform float hl, bias; varying vec3 vN, vC; ${DOTS}
+void main(){ vec3 n=normalize(vN); float l=dot(n,normalize(sun)); float dark=smoothstep(.62,-.4,l+bias);
  vec3 c=mix(a*vC,b*mix(vec3(1.),vC,.8),dots(dark)); if(hl>.5) c=mix(c,h,smoothstep(.955,.965,l)); gl_FragColor=vec4(c,1.); }`;
 const st = { stencilWrite: true, stencilFunc: THREE.EqualStencilFunc, stencilRef: 0, stencilZPass: THREE.KeepStencilOp };
 const smooth = (g) => {
@@ -44,27 +44,28 @@ export class World {
   constructor({ paper, paper2, pattern = 0, ink, shade = 0.5 }) {
     this.scene = new THREE.Scene(); this.paper = paper; this.ink = ink; this.shade = shade; this.mats = []; this.ticks = []; this.byColour = new Map();
     this.hull = this.keep(new THREE.ShaderMaterial({ vertexShader: "#define HULL\n" + VERT, fragmentShader: `uniform vec3 a; varying vec3 vN, vC; void main(){ gl_FragColor=vec4(a,1.); }`, uniforms: { a: { value: C(ink) }, line: G.line, res: G.res }, side: THREE.BackSide, ...st }));
-    const bg = new THREE.Mesh(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute([-1, -1, 0, 3, -1, 0, -1, 3, 0], 3)), this.keep(new THREE.ShaderMaterial({ depthTest: false, depthWrite: false, ...st, uniforms: { a: { value: C(paper) }, b: { value: C(paper2 ?? paper) }, axis: G.axis, cell: G.cell, ang: G.ang, res: G.res, time: G.time },
+    const bg = new THREE.Mesh(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute([-1, -1, 0, 3, -1, 0, -1, 3, 0], 3)), this.keep(new THREE.ShaderMaterial({ depthTest: false, depthWrite: false, ...st, uniforms: { a: { value: C(paper) }, b: { value: C(paper2 ?? paper) }, glow: { value: lerp(paper, "#ffffff", 0.3) }, mouse: G.mouse, axis: G.axis, cell: G.cell, ang: G.ang, res: G.res, time: G.time },
       vertexShader: "void main(){ gl_Position=vec4(position.xy,1.,1.); }",
-      fragmentShader: `uniform vec3 a,b; uniform vec2 res; uniform float time; ${DOTS}
+      fragmentShader: `uniform vec3 a,b,glow,mouse; uniform vec2 res; uniform float time; ${DOTS}
 void main(){ vec2 p=gl_FragCoord.xy-axis; float s=sin(ang),c=cos(ang); p=mat2(c,-s,s,c)*p; float u=cell*26., r=length(p)/u, t=atan(p.y,p.x), k=0.;
  ${["k=smoothstep(.2,7.,r)*.8;", "k=step(.5,fract(t/6.28318*14.+time*.012));", "k=step(.5,fract(r*.55-time*.05));", "k=step(.5,fract(p.x/u*.5));", "k=dot(p,vec2(.0,-1.))/u*.12+.45;", "vec2 g=p/u*.9, f=floor(g); float n=fract(sin(dot(f,vec2(12.9,78.2)))*43758.5); vec2 q=fract(g)-.5-vec2(n-.5,fract(n*7.)-.5)*.6; k=step(length(q),.015+.035*fract(n*13.));", "k=step(.5,fract((p.x+p.y)/u*.35));", "vec2 q=p/u*1.1; vec2 f=floor(q); k=mod(f.x+f.y,2.);"][pattern]}
- ${[0, 4].includes(pattern) ? "gl_FragColor=vec4(mix(a,b,dots(clamp(k,0.,.95))),1.);" : "gl_FragColor=vec4(mix(a,b,k),1.);"} }` }))); bg.frustumCulled = false; bg.renderOrder = -999; this.scene.add(bg);
+ ${[0, 4].includes(pattern) ? "gl_FragColor=vec4(mix(a,b,dots(clamp(k,0.,.95))),1.);" : "gl_FragColor=vec4(mix(a,b,k),1.);"}
+ if(mouse.z>.01){ float q=1.-smoothstep(0.,u*1.35,length(gl_FragCoord.xy-mouse.xy)); gl_FragColor.rgb=mix(gl_FragColor.rgb,glow,dots(q*q*.55*mouse.z)); } }` }))); bg.raycast = () => {}; this.bg = bg; bg.frustumCulled = false; bg.renderOrder = -999; this.scene.add(bg);
   }
   keep(m) { this.mats.push(m); return m; }
   mat(c, { b, hl = 0, bias = 0 } = {}) {
-    const k = [c, b, hl, bias].join(); if (!this.byColour.has(k)) this.byColour.set(k, this.keep(new THREE.ShaderMaterial({ vertexShader: VERT, fragmentShader: FRAG, side: THREE.DoubleSide, ...st, uniforms: { a: { value: C(c) }, b: { value: b ? C(b) : lerp(c, this.ink, this.shade) }, h: { value: lerp(c, "#ffffff", 0.8) }, hl: { value: hl }, bias: { value: bias }, axis: G.axis, cell: G.cell, ang: G.ang, res: G.res, line: G.line } })));
+    const k = [c, b, hl, bias].join(); if (!this.byColour.has(k)) this.byColour.set(k, this.keep(new THREE.ShaderMaterial({ vertexShader: VERT, fragmentShader: FRAG, side: THREE.DoubleSide, ...st, uniforms: { a: { value: C(c) }, b: { value: b ? C(b) : lerp(c, this.ink, this.shade) }, h: { value: lerp(c, "#ffffff", 0.8) }, hl: { value: hl }, bias: { value: bias }, axis: G.axis, cell: G.cell, ang: G.ang, res: G.res, line: G.line, sun: G.sun } })));
     return this.byColour.get(k);
   }
   // add a mesh: colour, position, rotation, options
   add(g, c, x = 0, y = 0, z = 0, o = {}) {
     const m = new THREE.Mesh(g, this.mat(c, o)); m.position.set(x, y, z); if (o.r) m.rotation.set(...o.r); if (o.s) Array.isArray(o.s) ? m.scale.set(...o.s) : m.scale.setScalar(o.s);
-    if (o.line !== 0) m.add(new THREE.Mesh(g, this.hull)); (o.to ?? this.scene).add(m); return m;
+    if (o.line !== 0) { const l = new THREE.Mesh(g, this.hull); l.raycast = () => {}; m.add(l); } (o.to ?? this.scene).add(m); return m;
   }
   many(g, list, o = {}) { // list of {x,y,z,r,s,c}
     if (!g.attributes.sn) smooth(g); const mat = this.mat("#ffffff", { b: o.b ?? "#8a8a9a", hl: o.hl ?? 0 }), m = new THREE.InstancedMesh(g, mat, list.length), d = new THREE.Object3D(); m.frustumCulled = false;
     m.set = (i, q) => { d.position.set(q.x, q.y, q.z ?? 0); d.rotation.set(...(q.r ?? [0, 0, 0])); Array.isArray(q.s) ? d.scale.set(...q.s) : d.scale.setScalar(q.s ?? 1); d.updateMatrix(); m.setMatrixAt(i, d.matrix); m.instanceMatrix.needsUpdate = true; };
-    list.forEach((q, i) => { m.set(i, q); m.setColorAt(i, C(q.c)); }); if (o.line !== 0) { const l = new THREE.InstancedMesh(g, this.hull, list.length); l.instanceMatrix = m.instanceMatrix; l.frustumCulled = false; m.add(l); } (o.to ?? this.scene).add(m); return m;
+    list.forEach((q, i) => { m.set(i, q); m.setColorAt(i, C(q.c)); }); if (o.line !== 0) { const l = new THREE.InstancedMesh(g, this.hull, list.length); l.instanceMatrix = m.instanceMatrix; l.frustumCulled = false; l.raycast = () => {}; m.add(l); } if (list.length > 400) m.raycast = () => {}; (o.to ?? this.scene).add(m); return m;
   }
   group(x = 0, y = 0, z = 0, to = this.scene) { const g = new THREE.Group(); g.position.set(x, y, z); to.add(g); return g; }
   // the way into the next world
@@ -73,6 +74,14 @@ void main(){ vec2 p=gl_FragCoord.xy-axis; float s=sin(ang),c=cos(ang); p=mat2(c,
     const g = shape ? new THREE.ShapeGeometry(shape, 40) : new THREE.CircleGeometry(r, 72), m = new THREE.Mesh(g, this.portalMat); m.position.z = z; m.renderOrder = 999; this.scene.add(m); this.hole = m; return m;
   }
   setLevel(l) { for (const m of this.mats) m.stencilRef = l; this.portalMat.stencilRef = l; }
+  // something to play with: { click(point, object), drag(dx, dy), tip }
+  on(o, a) { (Array.isArray(o) ? o : [o]).forEach((x) => (x.userData.on = a)); }
+  // a puff of paper
+  puff() {
+    const n = 44, q = Array.from({ length: n }, () => ({ x: 0, y: 0, z: -99, s: 0, r: [0, 0, 0], c: ["#ffd52e", "#ff4f8b", "#ffffff", "#2b3cff", "#12c26b", "#ff6a2b"][Math.floor(Math.random() * 6)], vx: 0, vy: 0, vz: 0, l: 0 })), m = this.many(geo.box(0.22, 0.14, 0.05, 0.02), q, { line: 0, b: "#777788" }); m.raycast = () => {}; m.visible = false; let live = 0, last = 0;
+    this.burst = (x, y, z = 0.5, k = 1) => { m.visible = true; live = 1.5; q.forEach((p) => { const a = Math.random() * 6.28, v = (1.5 + Math.random() * 4) * k; Object.assign(p, { x, y, z, vx: Math.cos(a) * v, vy: Math.sin(a) * v + 2, vz: Math.random() * 4, l: 0.8 + Math.random() * 0.7, r: [a, a, a] }); }); };
+    this.each((t) => { const dt = Math.min(0.05, t - last); last = t; if (live <= 0) { m.visible = false; return; } live -= dt; q.forEach((p, i) => { p.l -= dt; p.vy -= 9 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt; p.r[0] += dt * 7; p.r[1] += dt * 5; p.s = Math.max(0, Math.min(1, p.l * 3)); m.set(i, p); }); });
+  }
   each(f) { this.ticks.push(f); }
 }
 export { THREE, C, lerp };
