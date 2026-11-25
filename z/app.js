@@ -12,7 +12,7 @@ let rd; try { rd = new THREE.WebGLRenderer({ canvas: $("c"), antialias: true, st
 let q = Math.min(devicePixelRatio, tall ? 1.75 : 1.5), w = 1, ht = 1; const cam = new THREE.PerspectiveCamera(), eye = new THREE.PerspectiveCamera();
 const size = () => { w = innerWidth; ht = innerHeight; rd.setPixelRatio(q); rd.setSize(w, ht, false); G.res.value.set(w * q, ht * q); }; size(); addEventListener("resize", size);
 // which part of the screen each world is centred on, and how much of it must fit
-const AX = (i) => (tall ? [i === 8 ? 0.4 : 0.56, i === 0 ? 0.26 : 0.31] : [i === 0 ? 0.385 : 0.68, i === 0 ? 0.42 : 0.53]), FIT = (i) => (tall ? (i === 0 ? 3.4 : 3.35) : i === 0 ? 4.9 : 4.1);
+const AX = (i) => (tall ? [i === 8 ? 0.4 : 0.56, i === 0 ? 0.26 : 0.31] : [i === 0 ? 0.385 : 0.68, i === 0 ? 0.42 : 0.53]), FIT = (i) => (tall ? (i === 0 ? 3.4 : 3.35) : i === 0 ? (innerHeight < 720 ? 5.9 : 5.15) : 4.1);
 const at = (f, p) => { const i = Math.floor(p), t = p - i, s = t * t * (3 - 2 * t), a = f(mod(i, N)), b = f(mod(i + 1, N)); return Array.isArray(a) ? a.map((v, n) => v + (b[n] - v) * s) : a + (b - a) * s; };
 const fine = matchMedia("(pointer: fine)").matches; let p = calm ? 0 : 4, to = 0, v = 0, mx = 0, my = 0, ox = 0, oy = 0, intro = calm ? 1 : 0, shown = -1, idle = 0, falling = false, T = 0;
 function draw(dt) {
@@ -38,7 +38,7 @@ function say(i, again) {
     : [h("h2", {}, pr.t), h("p", { class: "hook" }, pr.hook[0].toUpperCase() + pr.hook.slice(1)), h("p", { class: "d" }, pr.d), h("div", { class: "links" }, link(pr.l[0][0], pr.l[0][1]), h("button", { type: "button", class: "two", onclick: () => more(pr) }, "How I built it"))]), hintFor(i));
   $("zoom").lastChild.textContent = i === 0 ? "the surface" : i === 10 ? "the desk" : `${pr.t}, ${i} of 9`;
 }
-let addr = -1; const address = (i) => { if (addr !== i) { addr = i; history.replaceState(null, "", i ? `#${P[i - 1]?.k ?? "hello"}` : location.pathname); } };
+const slug = (i) => (i === 10 ? "hello" : P[i - 1].k === "stepwise" ? "drishi" : P[i - 1].k); let addr = -1; const address = (i) => { if (addr !== i) { addr = i; history.replaceState(null, "", i ? `#${slug(i)}` : location.pathname); } };
 // games: one stamp per world, kept on this device
 let got; try { got = new Set(JSON.parse(localStorage.getItem("stamps") ?? "[]")); } catch { got = new Set(); }
 const verb = (s) => (fine ? s : s.replace(/^Click/, "Tap").replace("clicked", "tapped"));
@@ -84,6 +84,6 @@ function frame(now) {
   hopping(); draw(dt);
   if (++seen > 40 && dt > 0.024 && dt < 0.05) { if (++slow > 45 && q > 0.8) { q = Math.max(0.8, q - 0.2); slow = 0; size(); } } else slow = Math.max(0, slow - 0.4);
 }
-const hash = [null, ...ORDER, "hello"].indexOf(location.hash.slice(1)); if (hash > 0) { p = to = hash; intro = 1; }
+const hash = [null, ...ORDER, "hello"].indexOf(location.hash.slice(1).replace("drishi", "stepwise")); if (hash > 0) { p = to = hash; intro = 1; }
 W.forEach((x) => rd.compile(x.scene, cam)); document.fonts.ready.then(() => requestAnimationFrame(frame));
 window.__s = () => ({ p, to, q, calls: rd.info.render.calls, stamp, got, pick, W, set: (x) => { p = to = x; v = 0; intro = 1; }, step, go });
